@@ -25,9 +25,27 @@ export const validateContractDuration = (startDate: string, endDate: string): bo
   const start = new Date(startDate);
   const end = new Date(endDate);
   
-  // Calculate difference in months
-  const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + 
-                    (end.getMonth() - start.getMonth());
+  // Check if end date is after start date
+  if (end <= start) return false;
+  
+  // Calculate the difference in months more accurately
+  const startYear = start.getFullYear();
+  const startMonth = start.getMonth();
+  const startDay = start.getDate();
+  
+  const endYear = end.getFullYear();
+  const endMonth = end.getMonth();
+  const endDay = end.getDate();
+  
+  // Calculate total months difference
+  let monthsDiff = (endYear - startYear) * 12 + (endMonth - startMonth);
+  
+  // If end day is less than start day, subtract one month
+  if (endDay < startDay) {
+    monthsDiff--;
+  }
+  
+  console.log('Date validation:', { startDate, endDate, monthsDiff });
   
   return monthsDiff >= 6;
 };
