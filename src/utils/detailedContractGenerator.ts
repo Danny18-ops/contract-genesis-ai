@@ -1,3 +1,4 @@
+
 export const generateDetailedContract = (contractData: any): string => {
   const { contractType, organizationData, dynamicFields, language } = contractData;
   
@@ -576,3 +577,4 @@ _________________________          _________________________
 ${org.name || '[PARTY 1 NAME]'}                    ${fields.party2 || '[PARTY 2 NAME]'}
 
 Date: _________________            Date: _________________`;
+};
