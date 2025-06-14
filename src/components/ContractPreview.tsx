@@ -34,6 +34,48 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
     return parties;
   };
 
+  const getPreviewStyles = (template: string) => {
+    const styles = {
+      classic: {
+        container: 'bg-gray-50 border-gray-300',
+        content: 'bg-white p-8 font-serif text-gray-800 leading-relaxed',
+        header: 'text-center text-xl font-bold mb-6 text-gray-900 border-b-2 border-gray-300 pb-4',
+        text: 'text-sm leading-7',
+        accent: 'text-gray-700 font-semibold'
+      },
+      modern: {
+        container: 'bg-white border-blue-200',
+        content: 'bg-white p-12 font-sans text-gray-700 leading-loose border-l-4 border-blue-500',
+        header: 'text-2xl font-light text-blue-600 mb-8',
+        text: 'text-sm leading-8',
+        accent: 'text-blue-600 font-medium'
+      },
+      formal: {
+        container: 'bg-slate-50 border-slate-300',
+        content: 'bg-slate-50 p-8 font-sans text-slate-800 leading-relaxed border border-slate-300',
+        header: 'text-center text-lg font-bold text-slate-900 border-b border-slate-400 pb-3 mb-6',
+        text: 'text-sm leading-6',
+        accent: 'text-slate-700 font-semibold'
+      },
+      accent: {
+        container: 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200',
+        content: 'bg-gradient-to-br from-purple-50/50 to-pink-50/50 p-10 font-sans text-gray-800 leading-relaxed rounded-lg',
+        header: 'text-center text-xl font-bold text-purple-600 mb-6 bg-white/80 p-4 rounded-lg shadow-sm',
+        text: 'text-sm leading-7',
+        accent: 'text-purple-600 font-bold'
+      },
+      boxed: {
+        container: 'bg-amber-50 border-amber-200',
+        content: 'bg-amber-50 p-8 font-sans text-amber-900 leading-relaxed',
+        header: 'text-center text-lg font-bold text-amber-800 bg-white border-2 border-amber-300 p-4 rounded mb-6',
+        text: 'text-sm leading-6 bg-white/60 p-4 rounded border border-amber-200 mb-4',
+        accent: 'text-amber-700 font-bold'
+      }
+    };
+    
+    return styles[template as keyof typeof styles] || styles.modern;
+  };
+
   const getTemplateStyles = (template: string) => {
     const styles = {
       classic: {
@@ -310,6 +352,51 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
     }
   };
 
+  const formatContractContent = (content: string, template: string) => {
+    const lines = content.split('\n');
+    const previewStyle = getPreviewStyles(template);
+    
+    return lines.map((line, index) => {
+      if (line.trim() === '') {
+        return <br key={index} />;
+      }
+      
+      // Format headers (lines in ALL CAPS or with specific patterns)
+      if (line.match(/^[A-Z\s]+:?\s*$/) && line.length < 50) {
+        return (
+          <div key={index} className={`${previewStyle.accent} text-lg font-bold mb-4 mt-6`}>
+            {line}
+          </div>
+        );
+      }
+      
+      // Format section headers (numbered sections)
+      if (line.match(/^\d+\.\s/)) {
+        return (
+          <div key={index} className={`${previewStyle.accent} font-semibold mb-2 mt-4`}>
+            {line}
+          </div>
+        );
+      }
+      
+      // Format subsections (lettered subsections)
+      if (line.match(/^\s*[a-z]\)\s/)) {
+        return (
+          <div key={index} className="ml-4 mb-2">
+            {line}
+          </div>
+        );
+      }
+      
+      // Regular text
+      return (
+        <div key={index} className="mb-2">
+          {line}
+        </div>
+      );
+    });
+  };
+
   if (isGenerating) {
     return (
       <div className="flex flex-col items-center justify-center h-96 text-gray-500">
@@ -341,12 +428,15 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
 
   // Count pages (approximate)
   const estimatedPages = Math.ceil(contract.length / 3000);
+  const selectedTemplate = contractData?.template || 'modern';
+  const previewStyle = getPreviewStyles(selectedTemplate);
 
   return (
     <div className="space-y-4">
       {/* Contract Stats */}
       <div className="flex justify-between items-center text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
         <span>Document Length: {contract.length.toLocaleString()} characters</span>
+        <span>Template: <span className="font-semibold capitalize">{selectedTemplate}</span></span>
         <span>Estimated Pages: {estimatedPages}</span>
       </div>
 
@@ -399,13 +489,38 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
         </div>
       )}
 
-      {/* Contract Content */}
-      <Card className="border-green-100 bg-green-50/30">
+      {/* Contract Content with Template Styling */}
+      <Card className={`border-green-100 ${previewStyle.container}`}>
         <CardContent className="p-6">
-          <div className="bg-white rounded-lg p-6 shadow-sm border max-h-[600px] overflow-y-auto">
-            <pre className="whitespace-pre-wrap text-xs leading-relaxed text-gray-800 font-arial">
-              {contract}
-            </pre>
+          <div className={`${previewStyle.content} rounded-lg shadow-sm border max-h-[600px] overflow-y-auto`}>
+            {/* Contract Header */}
+            <div className={previewStyle.header}>
+              {contractData?.contractType?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() + ' CONTRACT' || 'LEGAL CONTRACT'}
+            </div>
+            
+            {/* Organization Info */}
+            {contractData?.organizationData && (
+              <div className="mb-6 text-center">
+                <div className={`${previewStyle.accent} text-lg mb-2`}>
+                  {contractData.organizationData.name}
+                </div>
+                {contractData.organizationData.address && (
+                  <div className="text-sm mb-1">{contractData.organizationData.address}</div>
+                )}
+                {(contractData.organizationData.email || contractData.organizationData.phone) && (
+                  <div className="text-sm">
+                    {[contractData.organizationData.email, contractData.organizationData.phone]
+                      .filter(Boolean)
+                      .join(' | ')}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Contract Content */}
+            <div className={previewStyle.text}>
+              {formatContractContent(contract, selectedTemplate)}
+            </div>
           </div>
         </CardContent>
       </Card>
