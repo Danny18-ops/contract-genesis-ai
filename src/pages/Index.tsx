@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
@@ -135,6 +134,13 @@ const Index = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Footer Credit */}
+          <div className="text-center mt-16 py-8 border-t border-white/20">
+            <p className="text-white/80 text-sm backdrop-blur-sm bg-white/5 inline-block px-6 py-2 rounded-full border border-white/10">
+              Designed and idea by <span className="font-semibold text-white">Dnyaneshwari Raut</span>
+            </p>
           </div>
         </div>
       </div>
