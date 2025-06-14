@@ -20,7 +20,7 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validateContractDuration = (startDate: string, endDate: string): boolean => {
-  if (!startDate || !endDate) return false;
+  if (!startDate || !endDate) return true; // Make dates optional
   
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -28,26 +28,14 @@ export const validateContractDuration = (startDate: string, endDate: string): bo
   // Check if end date is after start date
   if (end <= start) return false;
   
-  // Calculate the difference in months more accurately
-  const startYear = start.getFullYear();
-  const startMonth = start.getMonth();
-  const startDay = start.getDate();
+  // Calculate the difference in days
+  const diffTime = Math.abs(end.getTime() - start.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
-  const endYear = end.getFullYear();
-  const endMonth = end.getMonth();
-  const endDay = end.getDate();
+  console.log('Date validation:', { startDate, endDate, diffDays, isValid: diffDays >= 1 });
   
-  // Calculate total months difference
-  let monthsDiff = (endYear - startYear) * 12 + (endMonth - startMonth);
-  
-  // If end day is less than start day, subtract one month
-  if (endDay < startDay) {
-    monthsDiff--;
-  }
-  
-  console.log('Date validation:', { startDate, endDate, monthsDiff });
-  
-  return monthsDiff >= 6;
+  // Allow any duration as long as end date is after start date
+  return diffDays >= 1;
 };
 
 export const validateOrganizationData = (orgData: any): { isValid: boolean; errors: string[] } => {
