@@ -10,6 +10,16 @@ const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [contractData, setContractData] = useState<any>(null);
 
+  const handleContractGenerate = (data: any) => {
+    setContractData(data);
+    setIsGenerating(true);
+    // Simulate contract generation
+    setTimeout(() => {
+      setGeneratedContract('Sample generated contract content...');
+      setIsGenerating(false);
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -81,9 +91,7 @@ const Index = () => {
               </div>
               <div className="p-8 max-h-[800px] overflow-y-auto">
                 <ContractForm 
-                  onGenerate={setGeneratedContract}
-                  onGenerating={setIsGenerating}
-                  onContractData={setContractData}
+                  onContractGenerate={handleContractGenerate}
                   isGenerating={isGenerating}
                 />
               </div>
