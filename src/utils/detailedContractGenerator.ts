@@ -1,4 +1,3 @@
-
 export const generateDetailedContract = (contractData: any): string => {
   const { contractType, organizationData, dynamicFields, language } = contractData;
   
@@ -95,6 +94,9 @@ This Agreement constitutes the entire agreement between the parties and may only
 GOVERNING LAW
 This Agreement shall be governed by the laws of ${fields.state || '[STATE]'}.
 
+SIGNATURES
+This document requires signatures from both parties to be legally binding. Digital signatures will be automatically added below upon signing.
+
 IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.
 
 LANDLORD:                           TENANT:
@@ -102,7 +104,9 @@ LANDLORD:                           TENANT:
 _________________________          _________________________
 ${org.name || '[LANDLORD NAME]'}                    ${fields.tenant || '[TENANT NAME]'}
 
-Date: _________________            Date: _________________`;
+Date: _________________            Date: _________________
+
+[Digital signatures will appear here after signing]`;
 };
 
 const generateJobOfferLetter = (org: any, fields: any, date: string): string => {
@@ -572,4 +576,3 @@ _________________________          _________________________
 ${org.name || '[PARTY 1 NAME]'}                    ${fields.party2 || '[PARTY 2 NAME]'}
 
 Date: _________________            Date: _________________`;
-};
