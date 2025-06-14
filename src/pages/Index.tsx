@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
 import { Header } from '@/components/Header';
 import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
+import { generateDetailedContract } from '@/utils/detailedContractGenerator';
 
 const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
@@ -13,9 +13,11 @@ const Index = () => {
   const handleContractGenerate = (data: any) => {
     setContractData(data);
     setIsGenerating(true);
-    // Simulate contract generation
+    
+    // Generate comprehensive contract using the detailed generator
     setTimeout(() => {
-      setGeneratedContract('Sample generated contract content...');
+      const detailedContract = generateDetailedContract(data);
+      setGeneratedContract(detailedContract);
       setIsGenerating(false);
     }, 2000);
   };
