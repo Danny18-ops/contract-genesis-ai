@@ -1,11 +1,16 @@
+
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
-import { Header } from '@/components/Header';
+import { AuthHeader } from '@/components/AuthHeader';
+import { useAuth } from '@/contexts/AuthContext';
+import { useContracts } from '@/hooks/use-contracts';
 import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
 import { generateDetailedContract } from '@/utils/detailedContractGenerator';
 
 const Index = () => {
+  const { user } = useAuth();
+  const { saveContract } = useContracts();
   const [generatedContract, setGeneratedContract] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [contractData, setContractData] = useState<any>(null);
@@ -20,6 +25,19 @@ const Index = () => {
       setGeneratedContract(detailedContract);
       setIsGenerating(false);
     }, 2000);
+  };
+
+  const handleSaveContract = async () => {
+    if (!user || !generatedContract || !contractData) {
+      return;
+    }
+
+    try {
+      const title = `${contractData.contractType} - ${new Date().toLocaleDateString()}`;
+      await saveContract(title, contractData.contractType, generatedContract, contractData);
+    } catch (error) {
+      console.error('Failed to save contract:', error);
+    }
   };
 
   return (
@@ -41,7 +59,7 @@ const Index = () => {
       
       {/* Content */}
       <div className="relative z-10">
-        <Header />
+        <AuthHeader />
         
         {/* Enhanced Hero Section */}
         <div className="container mx-auto px-6 py-12">
@@ -113,6 +131,7 @@ const Index = () => {
                   contract={generatedContract}
                   isGenerating={isGenerating}
                   contractData={contractData}
+                  onSaveContract={user ? handleSaveContract : undefined}
                 />
               </div>
             </div>
