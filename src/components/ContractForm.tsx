@@ -50,8 +50,8 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
 
   const { toast } = useToast();
 
-  const getFieldsForContractType = (type: string) => {
-    const fieldMaps = {
+  const getFieldsForContractType = (type: string): { [key: string]: string } => {
+    const fieldMaps: { [key: string]: { [key: string]: string } } = {
       rental: {
         tenant: 'Tenant/Renter Name',
         landlord: 'Landlord/Property Owner',
@@ -99,7 +99,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       }
     };
 
-    return fieldMaps[type as keyof typeof fieldMaps] || {};
+    return fieldMaps[type] || {};
   };
 
   const handleContractTypeChange = (type: string) => {
@@ -188,7 +188,6 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
   };
 
   const fields = getFieldsForContractType(contractType);
-  const partyNames = Object.keys(signatures);
 
   return (
     <div className="space-y-6">
@@ -233,33 +232,36 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
               {contractType.charAt(0).toUpperCase() + contractType.slice(1)} Details
             </Label>
             <div className="grid md:grid-cols-2 gap-4">
-              {Object.entries(fields).map(([key, label]) => (
-                <div key={key}>
-                  <Label className="text-sm text-gray-600 mb-1 block">{label}</Label>
-                  {key.includes('Date') ? (
-                    <Input
-                      type="date"
-                      value={dynamicFields[key] || ''}
-                      onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
-                      className="bg-white"
-                    />
-                  ) : key.includes('Purpose') || key.includes('deliverables') || key.includes('benefits') ? (
-                    <Textarea
-                      placeholder={`Enter ${label.toLowerCase()}...`}
-                      value={dynamicFields[key] || ''}
-                      onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
-                      className="bg-white min-h-[80px]"
-                    />
-                  ) : (
-                    <Input
-                      placeholder={`Enter ${label.toLowerCase()}...`}
-                      value={dynamicFields[key] || ''}
-                      onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
-                      className="bg-white"
-                    />
-                  )}
-                </div>
-              ))}
+              {Object.entries(fields).map(([key, label]) => {
+                const labelString = String(label);
+                return (
+                  <div key={key}>
+                    <Label className="text-sm text-gray-600 mb-1 block">{labelString}</Label>
+                    {key.includes('Date') ? (
+                      <Input
+                        type="date"
+                        value={dynamicFields[key] || ''}
+                        onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
+                        className="bg-white"
+                      />
+                    ) : key.includes('Purpose') || key.includes('deliverables') || key.includes('benefits') ? (
+                      <Textarea
+                        placeholder={`Enter ${labelString.toLowerCase()}...`}
+                        value={dynamicFields[key] || ''}
+                        onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
+                        className="bg-white min-h-[80px]"
+                      />
+                    ) : (
+                      <Input
+                        placeholder={`Enter ${labelString.toLowerCase()}...`}
+                        value={dynamicFields[key] || ''}
+                        onChange={(e) => handleDynamicFieldChange(key, e.target.value)}
+                        className="bg-white"
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
