@@ -126,7 +126,7 @@ export const TemplateSelector = ({ onTemplateChange, selectedTemplate }: Templat
             <div key={template.id} className="relative">
               <Button
                 variant={selectedTemplate === template.id ? "default" : "outline"}
-                className={`h-auto p-3 flex flex-col items-start gap-3 relative w-full min-h-[120px] ${
+                className={`h-auto p-3 flex flex-col items-start gap-3 relative w-full min-h-[80px] ${
                   selectedTemplate === template.id ? 'ring-2 ring-purple-500' : ''
                 }`}
                 onClick={() => onTemplateChange(template.id)}
@@ -136,8 +136,7 @@ export const TemplateSelector = ({ onTemplateChange, selectedTemplate }: Templat
                 )}
                 <div className={`w-full h-12 rounded ${template.preview} border-2 flex-shrink-0`} />
                 <div className="text-left flex-1 w-full">
-                  <h4 className={`font-medium text-xs mb-1 ${template.accent} leading-tight`}>{template.name}</h4>
-                  <p className="text-xs text-gray-500 leading-tight break-words hyphens-auto">{template.description}</p>
+                  <h4 className={`font-medium text-sm ${template.accent} leading-tight text-center`}>{template.name}</h4>
                 </div>
               </Button>
               
