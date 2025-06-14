@@ -126,8 +126,12 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
     
     try {
       const pdf = new jsPDF();
-      const template = contractData?.template || 'modern';
-      const style = getTemplateStyles(template);
+      
+      // Get the selected template from contractData, default to 'modern' if not found
+      const selectedTemplate = contractData?.template || 'modern';
+      console.log('Using template for PDF:', selectedTemplate);
+      
+      const style = getTemplateStyles(selectedTemplate);
       
       const pageHeight = pdf.internal.pageSize.height;
       const pageWidth = pdf.internal.pageSize.width;
@@ -154,16 +158,31 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
       
       yPosition += 20;
       
-      // Add organization info as header
+      // Add template-specific styling for different sections
+      if (selectedTemplate === 'boxed') {
+        // Add border around title for boxed template
+        pdf.setDrawColor(style.color[0], style.color[1], style.color[2]);
+        pdf.rect(style.marginLeft, yPosition - 30, maxLineWidth, 25);
+      }
+      
+      if (selectedTemplate === 'accent') {
+        // Add gradient-like effect for accent template
+        pdf.setFillColor(style.color[0], style.color[1], style.color[2], 0.1);
+        pdf.rect(0, 0, pageWidth, 50, 'F');
+      }
+      
+      // Add organization info as header with template styling
       if (contractData?.organizationData) {
         const org = contractData.organizationData;
         pdf.setFontSize(12);
         pdf.setFont(style.fontFamily, 'bold');
+        pdf.setTextColor(style.color[0], style.color[1], style.color[2]);
         pdf.text(org.name || '', pageWidth / 2, yPosition, { align: 'center' });
         yPosition += 8;
         
         pdf.setFontSize(9);
         pdf.setFont(style.fontFamily, 'normal');
+        pdf.setTextColor(0, 0, 0);
         if (org.address) {
           pdf.text(org.address, pageWidth / 2, yPosition, { align: 'center' });
           yPosition += 6;
@@ -175,19 +194,33 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
         }
       }
       
-      yPosition += 10;
+      yPosition += 15;
       
-      // Add contract content
+      // Add contract content with template styling
       pdf.setFontSize(style.fontSize);
       pdf.setFont(style.fontFamily, 'normal');
       pdf.setTextColor(0, 0, 0);
       
-      const lines = pdf.splitTextToSize(contract, maxLineWidth);
+      // Apply template-specific formatting to contract text
+      let formattedContract = contract;
+      
+      if (selectedTemplate === 'boxed') {
+        // For boxed template, we could add visual separators
+        formattedContract = contract.replace(/\n\n/g, '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n');
+      }
+      
+      const lines = pdf.splitTextToSize(formattedContract, maxLineWidth);
       
       for (let i = 0; i < lines.length; i++) {
         if (yPosition > pageHeight - 60) {
           pdf.addPage();
           yPosition = style.marginTop;
+          
+          // Apply template background to new pages for accent template
+          if (selectedTemplate === 'accent') {
+            pdf.setFillColor(style.color[0], style.color[1], style.color[2], 0.05);
+            pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+          }
         }
         
         pdf.text(lines[i], style.marginLeft, yPosition);
@@ -242,17 +275,17 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
         pdf.text(footerText, style.marginLeft, pageHeight - 10);
       }
       
-      // Generate filename
+      // Generate filename with template name
       const contractType = contractData?.contractType || 'contract';
       const timestamp = new Date().toISOString().split('T')[0];
-      const filename = `${contractType}_${timestamp}.pdf`;
+      const filename = `${contractType}_${selectedTemplate}_${timestamp}.pdf`;
       
       // Save the PDF
       pdf.save(filename);
       
       toast({
         title: "PDF Downloaded!",
-        description: "Your contract has been saved as a styled PDF file.",
+        description: `Your contract has been saved with ${selectedTemplate} template styling.`,
       });
     } catch (error) {
       console.error('PDF generation error:', error);
