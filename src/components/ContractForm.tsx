@@ -9,6 +9,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateDetailedContract } from '@/utils/contractGenerator';
+import { FormAutomation } from './FormAutomation';
+import { ContractTypeIcon, getContractTypeGradient, getContractTypeImage } from './ContractTypeIcon';
 
 interface ContractFormProps {
   onGenerate: (contract: string) => void;
@@ -44,6 +46,14 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleAutoFill = (data: any) => {
+    setFormData(data);
+    toast({
+      title: "Form Auto-filled!",
+      description: "Sample data has been loaded. You can modify any fields before generating.",
+    });
   };
 
   const generateContract = async () => {
@@ -83,32 +93,53 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
 
   return (
     <div className="space-y-6">
-      {/* Contract Type Selection */}
-      <Card className="border-blue-100 bg-blue-50/30">
-        <CardContent className="p-4">
-          <Label className="text-base font-semibold text-gray-900 mb-3 block">
-            Contract Type *
-          </Label>
-          <Select value={formData.contractType} onValueChange={(value) => handleInputChange('contractType', value)}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select contract type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="nda">Non-Disclosure Agreement (NDA)</SelectItem>
-              <SelectItem value="freelance">Freelance/Service Agreement</SelectItem>
-              <SelectItem value="rental">Rental Agreement</SelectItem>
-              <SelectItem value="employment">Employment Contract</SelectItem>
-              <SelectItem value="partnership">Partnership Agreement</SelectItem>
-              <SelectItem value="consulting">Consulting Agreement</SelectItem>
-              <SelectItem value="license">License Agreement</SelectItem>
-            </SelectContent>
-          </Select>
+      {/* Automation Section */}
+      <FormAutomation onAutoFill={handleAutoFill} />
+
+      {/* Contract Type Selection with Enhanced UI */}
+      <Card className="border-blue-100 bg-blue-50/30 overflow-hidden">
+        <CardContent className="p-0">
+          {formData.contractType && (
+            <div className="h-32 relative overflow-hidden">
+              <img
+                src={getContractTypeImage(formData.contractType)}
+                alt={`${formData.contractType} contract`}
+                className="w-full h-full object-cover"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-r ${getContractTypeGradient(formData.contractType)} opacity-75`} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <ContractTypeIcon contractType={formData.contractType} className="w-8 h-8 mx-auto mb-2" />
+                  <h3 className="font-bold text-lg capitalize">{formData.contractType.replace(/([A-Z])/g, ' $1')} Contract</h3>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="p-4">
+            <Label className="text-base font-semibold text-gray-900 mb-3 block">
+              Contract Type *
+            </Label>
+            <Select value={formData.contractType} onValueChange={(value) => handleInputChange('contractType', value)}>
+              <SelectTrigger className="bg-white">
+                <SelectValue placeholder="Select contract type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="nda">🛡️ Non-Disclosure Agreement (NDA)</SelectItem>
+                <SelectItem value="freelance">👤 Freelance/Service Agreement</SelectItem>
+                <SelectItem value="rental">🏠 Rental Agreement</SelectItem>
+                <SelectItem value="employment">💼 Employment Contract</SelectItem>
+                <SelectItem value="partnership">👥 Partnership Agreement</SelectItem>
+                <SelectItem value="consulting">🏆 Consulting Agreement</SelectItem>
+                <SelectItem value="license">📄 License Agreement</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
 
       {/* Party Information */}
       <div className="grid md:grid-cols-2 gap-4">
-        <Card>
+        <Card className="border-l-4 border-l-blue-500">
           <CardContent className="p-4">
             <Label className="font-semibold text-gray-900 mb-2 block">Party 1 (First Party) *</Label>
             <div className="space-y-3">
@@ -141,7 +172,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-l-4 border-l-green-500">
           <CardContent className="p-4">
             <Label className="font-semibold text-gray-900 mb-2 block">Party 2 (Second Party) *</Label>
             <div className="space-y-3">
@@ -176,7 +207,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       </div>
 
       {/* Timeline */}
-      <Card>
+      <Card className="border-l-4 border-l-purple-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-3 block">Contract Timeline</Label>
           <div className="grid md:grid-cols-3 gap-4">
@@ -212,7 +243,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       </Card>
 
       {/* Financial Terms */}
-      <Card>
+      <Card className="border-l-4 border-l-yellow-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-3 block">Financial Terms</Label>
           <div className="grid md:grid-cols-2 gap-4">
@@ -239,7 +270,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       </Card>
 
       {/* Work Details */}
-      <Card>
+      <Card className="border-l-4 border-l-indigo-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-2 block">Scope of Work</Label>
           <Textarea
@@ -251,7 +282,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-l-4 border-l-teal-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-2 block">Deliverables & Milestones</Label>
           <Textarea
@@ -264,7 +295,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       </Card>
 
       {/* Legal Terms */}
-      <Card>
+      <Card className="border-l-4 border-l-red-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-3 block">Legal Terms</Label>
           <div className="space-y-4">
@@ -291,7 +322,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       </Card>
 
       {/* Additional Terms */}
-      <Card>
+      <Card className="border-l-4 border-l-gray-500">
         <CardContent className="p-4">
           <Label className="font-semibold text-gray-900 mb-2 block">Additional Terms & Conditions</Label>
           <Textarea
@@ -307,7 +338,7 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       <Button 
         onClick={generateContract}
         disabled={isGenerating}
-        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 text-lg font-semibold shadow-lg"
+        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all duration-200"
         size="lg"
       >
         {isGenerating ? (

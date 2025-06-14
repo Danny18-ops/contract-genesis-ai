@@ -184,7 +184,7 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
       <Card className="border-green-100 bg-green-50/30">
         <CardContent className="p-6">
           <div className="bg-white rounded-lg p-6 shadow-sm border max-h-[600px] overflow-y-auto">
-            <pre className="whitespace-pre-wrap text-xs leading-relaxed text-gray-800 font-mono">
+            <pre className="whitespace-pre-wrap text-xs leading-relaxed text-gray-800 font-arial">
               {contract}
             </pre>
           </div>

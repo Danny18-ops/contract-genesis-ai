@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
 import { Header } from '@/components/Header';
-import { FileText, Sparkles, Download } from 'lucide-react';
+import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
 
 const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
@@ -14,35 +14,39 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Header />
       
-      {/* Hero Section */}
+      {/* Enhanced Hero Section */}
       <div className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <div className="bg-blue-600 p-3 rounded-2xl shadow-lg">
-              <FileText className="w-8 h-8 text-white" />
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-3xl shadow-2xl">
+              <FileText className="w-10 h-10 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
             GenContract
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            Generate legally sound contracts in minutes using AI. From NDAs to freelance agreements, 
-            create professional contracts tailored to your needs.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+            Generate comprehensive, legally sound contracts in minutes using advanced AI. From NDAs to freelance agreements, 
+            create professional contracts tailored to your specific needs with automated form filling and premium templates.
           </p>
           
-          {/* Feature highlights */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12">
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
-              <Sparkles className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-medium text-gray-700">AI-Powered</span>
+          {/* Enhanced Feature highlights */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-gray-200 hover:shadow-xl transition-all">
+              <Sparkles className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-semibold text-gray-700">AI-Powered Generation</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
-              <FileText className="w-4 h-4 text-green-600" />
-              <span className="text-sm font-medium text-gray-700">Legally Sound</span>
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-gray-200 hover:shadow-xl transition-all">
+              <Shield className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-semibold text-gray-700">Legally Compliant</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
-              <Download className="w-4 h-4 text-purple-600" />
-              <span className="text-sm font-medium text-gray-700">PDF Export</span>
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-gray-200 hover:shadow-xl transition-all">
+              <Download className="w-5 h-5 text-purple-600" />
+              <span className="text-sm font-semibold text-gray-700">PDF Export</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-gray-200 hover:shadow-xl transition-all">
+              <Zap className="w-5 h-5 text-orange-600" />
+              <span className="text-sm font-semibold text-gray-700">Auto-Fill Templates</span>
             </div>
           </div>
         </div>
@@ -50,12 +54,12 @@ const Index = () => {
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
           {/* Contract Form */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden backdrop-blur-sm">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-              <h2 className="text-2xl font-bold text-white">Contract Details</h2>
-              <p className="text-blue-100 mt-2">Fill in the information below to generate your contract</p>
+              <h2 className="text-2xl font-bold text-white">Contract Builder</h2>
+              <p className="text-blue-100 mt-2">Fill in details or use quick templates to generate your contract</p>
             </div>
-            <div className="p-6">
+            <div className="p-6 max-h-[800px] overflow-y-auto">
               <ContractForm 
                 onGenerate={setGeneratedContract}
                 onGenerating={setIsGenerating}
@@ -66,12 +70,12 @@ const Index = () => {
           </div>
 
           {/* Contract Preview */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden backdrop-blur-sm">
             <div className="bg-gradient-to-r from-gray-700 to-gray-800 p-6">
               <h2 className="text-2xl font-bold text-white">Contract Preview</h2>
-              <p className="text-gray-200 mt-2">Generated contract will appear here</p>
+              <p className="text-gray-200 mt-2">Your generated contract will appear here in Arial font</p>
             </div>
-            <div className="p-6">
+            <div className="p-6 max-h-[800px] overflow-y-auto">
               <ContractPreview 
                 contract={generatedContract}
                 isGenerating={isGenerating}
