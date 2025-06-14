@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -13,6 +14,8 @@ import { useOrganization } from '@/hooks/use-organization';
 import { TemplateSelector } from './TemplateSelector';
 import { Languages } from '@/constants';
 import { validateOrganizationData, validateNameField, validateContractDuration } from '@/utils/validation';
+import { EnhancedContractTypeSelector } from './EnhancedContractTypeSelector';
+import { FormAutomation } from './FormAutomation';
 
 interface ContractFormProps {
   onContractGenerate: (contractData: any) => void;
@@ -45,6 +48,31 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
       setSavedOrgData(organization);
     }
   }, [organization]);
+
+  const handleAutoFill = (data: any) => {
+    setContractType(data.contractType);
+    setOrganizationData({
+      name: data.party1Name || '',
+      address: data.party1Address || '',
+      email: data.party1Email || '',
+      phone: '',
+      logo: ''
+    });
+    
+    const newDynamicFields: { [key: string]: string } = {};
+    Object.keys(data).forEach(key => {
+      if (key !== 'contractType' && !key.startsWith('party1')) {
+        newDynamicFields[key] = data[key];
+      }
+    });
+    
+    setDynamicFields(newDynamicFields);
+    
+    toast({
+      title: "Sample Data Loaded",
+      description: "The form has been filled with sample data for testing purposes.",
+    });
+  };
 
   const handleDynamicFieldChange = (field: string, value: string) => {
     // Validate name fields to only allow letters and spaces
@@ -216,6 +244,9 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Quick Start Templates */}
+        <FormAutomation onAutoFill={handleAutoFill} />
+
         {/* Validation Errors Display */}
         {validationErrors.length > 0 && (
           <Alert variant="destructive">
@@ -229,30 +260,11 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
           </Alert>
         )}
 
-        {/* Contract Type */}
-        <div>
-          <Label htmlFor="contractType" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
-            Contract Type *
-          </Label>
-          <Select value={contractType} onValueChange={setContractType}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select contract type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="rental">Rental Agreement</SelectItem>
-              <SelectItem value="jobOffer">Job Offer Letter</SelectItem>
-              <SelectItem value="business">Business Agreement</SelectItem>
-              <SelectItem value="carRental">Car Rental Contract</SelectItem>
-              <SelectItem value="storage">Storage Container Lease</SelectItem>
-              <SelectItem value="nda">Non-Disclosure Agreement (NDA)</SelectItem>
-              <SelectItem value="freelance">Freelance/Service Agreement</SelectItem>
-              <SelectItem value="employment">Employment Contract</SelectItem>
-              <SelectItem value="partnership">Partnership Agreement</SelectItem>
-              <SelectItem value="consulting">Consulting Agreement</SelectItem>
-              <SelectItem value="license">License Agreement</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Enhanced Contract Type Selector */}
+        <EnhancedContractTypeSelector 
+          onContractTypeChange={setContractType}
+          selectedType={contractType}
+        />
 
         {/* Dynamic Fields - based on contract type */}
         {contractType === 'rental' && (
@@ -372,6 +384,69 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
               value={dynamicFields.renter || ''}
               onChange={(e) => handleDynamicFieldChange('renter', e.target.value)}
             />
+          </div>
+        )}
+
+        {/* Universal Contract Fields */}
+        {contractType && (
+          <div className="space-y-4 border rounded-md p-4 bg-gray-50">
+            <h4 className="text-sm font-semibold mb-3">Contract Details</h4>
+            
+            {/* Scope of Work */}
+            <div>
+              <Label htmlFor="scopeOfWork" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                Scope of Work
+              </Label>
+              <Textarea
+                id="scopeOfWork"
+                placeholder="Describe in detail the work, services, or subject matter of this contract. Include specific responsibilities, expectations, and requirements..."
+                rows={4}
+                value={dynamicFields.scopeOfWork || ''}
+                onChange={(e) => handleDynamicFieldChange('scopeOfWork', e.target.value)}
+              />
+            </div>
+
+            {/* Deliverables & Milestones */}
+            <div>
+              <Label htmlFor="deliverables" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                Deliverables & Milestones
+              </Label>
+              <Textarea
+                id="deliverables"
+                placeholder="List specific deliverables, milestones, deadlines, and performance metrics..."
+                rows={3}
+                value={dynamicFields.deliverables || ''}
+                onChange={(e) => handleDynamicFieldChange('deliverables', e.target.value)}
+              />
+            </div>
+
+            {/* Governing Jurisdiction */}
+            <div>
+              <Label htmlFor="jurisdiction" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                Governing Jurisdiction
+              </Label>
+              <Input
+                type="text"
+                id="jurisdiction"
+                placeholder="e.g., State of California, USA"
+                value={dynamicFields.jurisdiction || ''}
+                onChange={(e) => handleDynamicFieldChange('jurisdiction', e.target.value)}
+              />
+            </div>
+
+            {/* Termination Conditions */}
+            <div>
+              <Label htmlFor="terminationConditions" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                Termination Conditions
+              </Label>
+              <Textarea
+                id="terminationConditions"
+                placeholder="Specify conditions under which this contract can be terminated..."
+                rows={3}
+                value={dynamicFields.terminationConditions || ''}
+                onChange={(e) => handleDynamicFieldChange('terminationConditions', e.target.value)}
+              />
+            </div>
           </div>
         )}
 
