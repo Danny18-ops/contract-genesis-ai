@@ -13,7 +13,6 @@ import { OrganizationInfo } from './OrganizationInfo';
 import { LanguageSelector } from './LanguageSelector';
 import { TemplateSelector } from './TemplateSelector';
 import { EnhancedContractTypeSelector } from './EnhancedContractTypeSelector';
-import { DigitalSignature } from './DigitalSignature';
 import { FooterCustomization } from './FooterCustomization';
 
 interface ContractFormProps {
@@ -43,7 +42,6 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
     phone: '',
     logo: null
   });
-  const [signatures, setSignatures] = useState<{ [key: string]: string }>({});
 
   // Dynamic form fields based on contract type
   const [dynamicFields, setDynamicFields] = useState<{ [key: string]: string }>({});
@@ -158,7 +156,6 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
       template,
       footerText,
       organizationData,
-      signatures,
       dynamicFields,
       ...dynamicFields
     };
@@ -265,14 +262,6 @@ export const ContractForm = ({ onGenerate, onGenerating, onContractData, isGener
             </div>
           </CardContent>
         </Card>
-      )}
-
-      {/* Digital Signatures */}
-      {contractType && (
-        <DigitalSignature
-          onSignatureChange={setSignatures}
-          parties={[organizationData.name || 'Organization', dynamicFields.tenant || dynamicFields.candidate || dynamicFields.party2 || dynamicFields.renter || 'Second Party']}
-        />
       )}
 
       {/* Generate Button */}

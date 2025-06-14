@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Download, FileText, Loader2, Copy, Check } from 'lucide-react';
+import { Download, FileText, Loader2, Copy, Check, PenTool } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { DigitalSignature } from './DigitalSignature';
 import jsPDF from 'jspdf';
 
 interface ContractPreviewProps {
@@ -15,7 +15,91 @@ interface ContractPreviewProps {
 export const ContractPreview = ({ contract, isGenerating, contractData }: ContractPreviewProps) => {
   const [copied, setCopied] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [signatures, setSignatures] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
+
+  const getParties = () => {
+    if (!contractData) return [];
+    
+    const parties = [contractData.organizationData?.name || 'Organization'];
+    
+    // Add second party based on contract type
+    if (contractData.dynamicFields?.tenant) parties.push(contractData.dynamicFields.tenant);
+    else if (contractData.dynamicFields?.candidate) parties.push(contractData.dynamicFields.candidate);
+    else if (contractData.dynamicFields?.party2) parties.push(contractData.dynamicFields.party2);
+    else if (contractData.dynamicFields?.renter) parties.push(contractData.dynamicFields.renter);
+    else parties.push('Second Party');
+    
+    return parties;
+  };
+
+  const getTemplateStyles = (template: string) => {
+    const styles = {
+      classic: {
+        fontFamily: 'Times',
+        fontSize: 11,
+        lineHeight: 1.4,
+        headerSize: 16,
+        headerFont: 'Times',
+        headerWeight: 'bold',
+        marginTop: 25,
+        marginLeft: 25,
+        marginRight: 25,
+        color: [0, 0, 0]
+      },
+      modern: {
+        fontFamily: 'Helvetica',
+        fontSize: 10,
+        lineHeight: 1.6,
+        headerSize: 18,
+        headerFont: 'Helvetica',
+        headerWeight: 'normal',
+        marginTop: 30,
+        marginLeft: 30,
+        marginRight: 30,
+        color: [37, 99, 235]
+      },
+      formal: {
+        fontFamily: 'Helvetica',
+        fontSize: 10,
+        lineHeight: 1.5,
+        headerSize: 14,
+        headerFont: 'Helvetica',
+        headerWeight: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+        color: [51, 65, 85]
+      },
+      accent: {
+        fontFamily: 'Helvetica',
+        fontSize: 10,
+        lineHeight: 1.5,
+        headerSize: 16,
+        headerFont: 'Helvetica',
+        headerWeight: 'bold',
+        marginTop: 25,
+        marginLeft: 25,
+        marginRight: 25,
+        color: [147, 51, 234]
+      },
+      boxed: {
+        fontFamily: 'Helvetica',
+        fontSize: 10,
+        lineHeight: 1.4,
+        headerSize: 14,
+        headerFont: 'Helvetica',
+        headerWeight: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+        color: [180, 83, 9]
+      }
+    };
+    
+    return styles[template as keyof typeof styles] || styles.modern;
+  };
 
   const copyToClipboard = async () => {
     try {
@@ -42,40 +126,108 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
     
     try {
       const pdf = new jsPDF();
+      const template = contractData?.template || 'modern';
+      const style = getTemplateStyles(template);
+      
       const pageHeight = pdf.internal.pageSize.height;
       const pageWidth = pdf.internal.pageSize.width;
-      const margin = 20;
-      const lineHeight = 6;
-      const maxLineWidth = pageWidth - (margin * 2);
+      const maxLineWidth = pageWidth - (style.marginLeft + style.marginRight);
       
-      // Set font
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
+      let yPosition = style.marginTop;
       
-      // Split contract into lines that fit the page width
-      const lines = pdf.splitTextToSize(contract, maxLineWidth);
+      // Add organization logo if available
+      if (contractData?.organizationData?.logo) {
+        try {
+          pdf.addImage(contractData.organizationData.logo, 'JPEG', pageWidth - 70, 10, 50, 30);
+        } catch (error) {
+          console.log('Logo could not be added to PDF');
+        }
+      }
       
-      let yPosition = margin;
+      // Add title with template styling
+      pdf.setFont(style.headerFont, style.headerWeight);
+      pdf.setFontSize(style.headerSize);
+      pdf.setTextColor(style.color[0], style.color[1], style.color[2]);
       
-      // Add title
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
       const title = contractData?.contractType?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() + ' CONTRACT' || 'LEGAL CONTRACT';
       pdf.text(title, pageWidth / 2, yPosition, { align: 'center' });
       
-      yPosition += 15;
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
+      yPosition += 20;
       
-      // Add lines to PDF
+      // Add organization info as header
+      if (contractData?.organizationData) {
+        const org = contractData.organizationData;
+        pdf.setFontSize(12);
+        pdf.setFont(style.fontFamily, 'bold');
+        pdf.text(org.name || '', pageWidth / 2, yPosition, { align: 'center' });
+        yPosition += 8;
+        
+        pdf.setFontSize(9);
+        pdf.setFont(style.fontFamily, 'normal');
+        if (org.address) {
+          pdf.text(org.address, pageWidth / 2, yPosition, { align: 'center' });
+          yPosition += 6;
+        }
+        if (org.email || org.phone) {
+          const contact = [org.email, org.phone].filter(Boolean).join(' | ');
+          pdf.text(contact, pageWidth / 2, yPosition, { align: 'center' });
+          yPosition += 6;
+        }
+      }
+      
+      yPosition += 10;
+      
+      // Add contract content
+      pdf.setFontSize(style.fontSize);
+      pdf.setFont(style.fontFamily, 'normal');
+      pdf.setTextColor(0, 0, 0);
+      
+      const lines = pdf.splitTextToSize(contract, maxLineWidth);
+      
       for (let i = 0; i < lines.length; i++) {
-        if (yPosition > pageHeight - margin) {
+        if (yPosition > pageHeight - 60) {
           pdf.addPage();
-          yPosition = margin;
+          yPosition = style.marginTop;
         }
         
-        pdf.text(lines[i], margin, yPosition);
-        yPosition += lineHeight;
+        pdf.text(lines[i], style.marginLeft, yPosition);
+        yPosition += style.fontSize * style.lineHeight;
+      }
+      
+      // Add signatures if available
+      if (Object.keys(signatures).length > 0) {
+        yPosition += 20;
+        if (yPosition > pageHeight - 100) {
+          pdf.addPage();
+          yPosition = style.marginTop;
+        }
+        
+        pdf.setFont(style.fontFamily, 'bold');
+        pdf.setFontSize(12);
+        pdf.text('SIGNATURES:', style.marginLeft, yPosition);
+        yPosition += 15;
+        
+        const parties = Object.keys(signatures);
+        const signatureWidth = maxLineWidth / parties.length - 10;
+        
+        parties.forEach((party, index) => {
+          const xPosition = style.marginLeft + (index * (signatureWidth + 10));
+          
+          // Add signature image
+          try {
+            pdf.addImage(signatures[party], 'PNG', xPosition, yPosition, signatureWidth, 30);
+          } catch (error) {
+            console.log('Signature could not be added for', party);
+          }
+          
+          // Add signature line and name
+          pdf.setDrawColor(0, 0, 0);
+          pdf.line(xPosition, yPosition + 35, xPosition + signatureWidth, yPosition + 35);
+          pdf.setFont(style.fontFamily, 'normal');
+          pdf.setFontSize(8);
+          pdf.text(party, xPosition + (signatureWidth / 2), yPosition + 40, { align: 'center' });
+          pdf.text('Signature', xPosition + (signatureWidth / 2), yPosition + 45, { align: 'center' });
+        });
       }
       
       // Add footer to each page
@@ -84,21 +236,23 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
         pdf.setPage(i);
         pdf.setFontSize(8);
         pdf.setTextColor(128, 128, 128);
-        pdf.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 10, { align: 'right' });
-        pdf.text('Generated by GenContract AI', margin, pageHeight - 10);
+        pdf.text(`Page ${i} of ${totalPages}`, pageWidth - style.marginRight, pageHeight - 10, { align: 'right' });
+        
+        const footerText = contractData?.footerText || 'Generated by GenContract AI';
+        pdf.text(footerText, style.marginLeft, pageHeight - 10);
       }
       
       // Generate filename
       const contractType = contractData?.contractType || 'contract';
       const timestamp = new Date().toISOString().split('T')[0];
-      const filename = `${contractType}_${contractData?.party1Name || 'contract'}_${timestamp}.pdf`;
+      const filename = `${contractType}_${timestamp}.pdf`;
       
       // Save the PDF
       pdf.save(filename);
       
       toast({
         title: "PDF Downloaded!",
-        description: "Your contract has been saved as a PDF file.",
+        description: "Your contract has been saved as a styled PDF file.",
       });
     } catch (error) {
       console.error('PDF generation error:', error);
@@ -153,22 +307,30 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 mb-4">
+      <div className="grid grid-cols-2 gap-2 mb-4">
         <Button
           onClick={copyToClipboard}
           variant="outline"
           size="sm"
-          className="flex-1"
           disabled={!contract}
         >
           {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
           {copied ? 'Copied!' : 'Copy Text'}
         </Button>
         <Button
+          onClick={() => setShowSignatureModal(true)}
+          variant="outline"
+          size="sm"
+          className="bg-purple-50 hover:bg-purple-100 border-purple-200"
+        >
+          <PenTool className="w-4 h-4 mr-2" />
+          Add Signatures
+        </Button>
+        <Button
           onClick={downloadAsPDF}
           variant="default"
           size="sm"
-          className="flex-1 bg-green-600 hover:bg-green-700"
+          className="col-span-2 bg-green-600 hover:bg-green-700"
           disabled={!contract || isDownloading}
         >
           {isDownloading ? (
@@ -176,9 +338,22 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
           ) : (
             <Download className="w-4 h-4 mr-2" />
           )}
-          {isDownloading ? 'Generating PDF...' : 'Download PDF'}
+          {isDownloading ? 'Generating PDF...' : 'Download Styled PDF'}
         </Button>
       </div>
+
+      {/* Signatures Status */}
+      {Object.keys(signatures).length > 0 && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-center gap-2 text-green-700">
+            <Check className="w-4 h-4" />
+            <span className="font-medium">Signatures Added ({Object.keys(signatures).length})</span>
+          </div>
+          <div className="text-sm text-green-600 mt-1">
+            {Object.keys(signatures).join(', ')}
+          </div>
+        </div>
+      )}
 
       {/* Contract Content */}
       <Card className="border-green-100 bg-green-50/30">
@@ -213,6 +388,14 @@ export const ContractPreview = ({ contract, isGenerating, contractData }: Contra
           </div>
         </CardContent>
       </Card>
+
+      {/* Digital Signature Modal */}
+      <DigitalSignature
+        isOpen={showSignatureModal}
+        onClose={() => setShowSignatureModal(false)}
+        onSignatureChange={setSignatures}
+        parties={getParties()}
+      />
     </div>
   );
 };
