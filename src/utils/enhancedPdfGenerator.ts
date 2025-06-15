@@ -89,20 +89,32 @@ export class EnhancedPdfGenerator {
     this.pdf.setFillColor(r, g, b);
   }
 
-  private drawIcon(type: string, x: number, y: number, size: number = 12) {
-    this.pdf.setFontSize(size);
-    const icons: { [key: string]: string } = {
-      roommate: '🏠',
-      friendLoan: '💸',
-      groupTrip: '✈️',
-      eventHosting: '🎉',
-      sharedSubscription: '📱',
-      casualBorrowing: '🤝',
-      advanced: '📄',
-      default: '📄'
-    };
+  private addLotusLogo(x: number, y: number, size: number = 20) {
+    // Draw a stylized lotus logo using geometric shapes
+    this.pdf.setFillColor(255, 123, 89); // Orange-red gradient start
     
-    this.pdf.text(icons[type] || icons.default, x, y);
+    // Create lotus petals using ellipses and curves
+    const centerX = x + size/2;
+    const centerY = y + size/2;
+    const petalSize = size * 0.3;
+    
+    // Draw multiple petals in a circular pattern
+    for (let i = 0; i < 8; i++) {
+      const angle = (i * Math.PI * 2) / 8;
+      const petalX = centerX + Math.cos(angle) * petalSize * 0.5;
+      const petalY = centerY + Math.sin(angle) * petalSize * 0.5;
+      
+      // Gradient effect by varying opacity/color
+      const intensity = 255 - (i * 20);
+      this.pdf.setFillColor(intensity, 80 + (i * 10), 120 + (i * 15));
+      
+      // Draw petal as an ellipse
+      this.pdf.ellipse(petalX, petalY, petalSize * 0.4, petalSize * 0.6, Math.PI/4 + angle, 'F');
+    }
+    
+    // Center circle
+    this.pdf.setFillColor(255, 200, 100);
+    this.pdf.circle(centerX, centerY, petalSize * 0.2, 'F');
   }
 
   private addHeader(contractType: string, title: string) {
@@ -112,19 +124,19 @@ export class EnhancedPdfGenerator {
     this.setFillColor(colors.primary);
     this.pdf.rect(0, 0, 210, 35, 'F');
     
-    // Icon
-    this.drawIcon(contractType, 20, 20, 16);
+    // Add lotus logo on the right side
+    this.addLotusLogo(160, 8, 18);
     
     // Title
     this.pdf.setTextColor(255, 255, 255);
     this.pdf.setFontSize(20);
     this.pdf.setFont('helvetica', 'bold');
-    this.pdf.text(title, 40, 22);
+    this.pdf.text(title, 20, 22);
     
     // Subtitle line
     this.pdf.setFontSize(10);
     this.pdf.setFont('helvetica', 'normal');
-    this.pdf.text('Professional Contract Agreement', 40, 28);
+    this.pdf.text('Professional Contract Agreement', 20, 28);
     
     return 45; // Return next Y position
   }
