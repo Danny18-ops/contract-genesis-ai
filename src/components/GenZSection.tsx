@@ -1,7 +1,10 @@
 
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
+import { RoommateFlow } from './RoommateFlow';
+import { useState } from 'react';
 
 interface GenZSectionProps {
   onQuickContract: (data: any) => void;
@@ -71,8 +74,16 @@ const genZTemplates = [
 ];
 
 export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
+  const [showRoommateFlow, setShowRoommateFlow] = useState(false);
+
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
+    
+    // Open custom flow for roommate agreements
+    if (template.contractType === 'roommate') {
+      setShowRoommateFlow(true);
+      return;
+    }
     
     const quickData = {
       contractType: template.contractType,
@@ -100,71 +111,80 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   };
 
   return (
-    <div className="mb-16">
-      {/* Section Header */}
-      <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-          Why Gen Z Uses GenContract
-        </h2>
-        <p className="text-xl text-white/90 max-w-3xl mx-auto drop-shadow-md">
-          Keep it real, funny, and helpful — because life's too short for unresolved agreements
-        </p>
-      </div>
-
-      {/* Template Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
-        {genZTemplates.map((template) => (
-          <Card key={template.id} className={`${template.bgColor} border-white/20 overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group`}>
-            <CardContent className="p-0">
-              {/* Header with Gradient */}
-              <div className={`bg-gradient-to-r ${template.gradient} p-6 text-white relative overflow-hidden`}>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
-                <div className="relative z-10 flex items-center gap-3 mb-3">
-                  <template.icon className="w-8 h-8" />
-                  <h3 className="text-xl font-bold">{template.title}</h3>
-                </div>
-                <p className="text-white/90 text-sm leading-relaxed">{template.description}</p>
-              </div>
-              
-              {/* Content */}
-              <div className="p-6">
-                <p className="text-gray-600 text-sm italic mb-4 leading-relaxed">
-                  "{template.example}"
-                </p>
-                <Button 
-                  onClick={() => handleQuickTemplate(template)}
-                  className={`w-full bg-gradient-to-r ${template.gradient} hover:opacity-90 text-white font-semibold`}
-                >
-                  Let's Make It Official 📝
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="text-center">
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-4xl mx-auto">
-          <h3 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
-            Ready to Make Any Agreement Official?
-          </h3>
-          <p className="text-white/90 mb-6 drop-shadow-md">
-            Use our full contract builder below for custom agreements, or choose a quick template above for instant contracts.
+    <>
+      <div className="mb-16">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+            Why Gen Z Uses GenContract
+          </h2>
+          <p className="text-xl text-white/90 max-w-3xl mx-auto drop-shadow-md">
+            Keep it real, funny, and helpful — because life's too short for unresolved agreements
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
-              ✅ No legal jargon
-            </div>
-            <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
-              ✅ Friend-tested
-            </div>
-            <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
-              ✅ Actually enforceable
+        </div>
+
+        {/* Template Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
+          {genZTemplates.map((template) => (
+            <Card key={template.id} className={`${template.bgColor} border-white/20 overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group`}>
+              <CardContent className="p-0">
+                {/* Header with Gradient */}
+                <div className={`bg-gradient-to-r ${template.gradient} p-6 text-white relative overflow-hidden`}>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
+                  <div className="relative z-10 flex items-center gap-3 mb-3">
+                    <template.icon className="w-8 h-8" />
+                    <h3 className="text-xl font-bold">{template.title}</h3>
+                  </div>
+                  <p className="text-white/90 text-sm leading-relaxed">{template.description}</p>
+                </div>
+                
+                {/* Content */}
+                <div className="p-6">
+                  <p className="text-gray-600 text-sm italic mb-4 leading-relaxed">
+                    "{template.example}"
+                  </p>
+                  <Button 
+                    onClick={() => handleQuickTemplate(template)}
+                    className={`w-full bg-gradient-to-r ${template.gradient} hover:opacity-90 text-white font-semibold`}
+                  >
+                    Let's Make It Official 📝
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
+              Ready to Make Any Agreement Official?
+            </h3>
+            <p className="text-white/90 mb-6 drop-shadow-md">
+              Use our full contract builder below for custom agreements, or choose a quick template above for instant contracts.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
+                ✅ No legal jargon
+              </div>
+              <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
+                ✅ Friend-tested
+              </div>
+              <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
+                ✅ Actually enforceable
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Roommate Flow Modal */}
+      <RoommateFlow 
+        isOpen={showRoommateFlow}
+        onClose={() => setShowRoommateFlow(false)}
+      />
+    </>
   );
 };
+
