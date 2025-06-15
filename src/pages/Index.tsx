@@ -111,7 +111,7 @@ const Index = () => {
           <GenZSection onQuickContract={handleContractGenerate} />
 
           {/* Main Content */}
-          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mt-16">
+          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mt-16 contract-builder-section">
             {/* Contract Form */}
             <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
               <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 relative overflow-hidden">

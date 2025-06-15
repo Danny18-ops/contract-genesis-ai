@@ -1,6 +1,7 @@
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
+import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee, FileText } from 'lucide-react';
 import { RoommateFlow } from './RoommateFlow';
 import { FriendLoanFlow } from './FriendLoanFlow';
 import { GroupTripFlow } from './GroupTripFlow';
@@ -148,6 +149,14 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     onQuickContract(quickData);
   };
 
+  const handleCreateYourOwn = () => {
+    // Scroll to the contract builder section
+    const contractBuilder = document.querySelector('.contract-builder-section');
+    if (contractBuilder) {
+      contractBuilder.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <div className="mb-16">
@@ -191,6 +200,29 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Create Your Own Contract Button */}
+        <div className="text-center mb-12">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto">
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4 rounded-full shadow-2xl backdrop-blur-sm border border-white/20">
+                <FileText className="w-8 h-8 text-white drop-shadow-lg" />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
+              Need Something Custom?
+            </h3>
+            <p className="text-white/90 mb-6 drop-shadow-md">
+              Create your own contract with our full builder for any type of agreement
+            </p>
+            <Button 
+              onClick={handleCreateYourOwn}
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold px-8 py-3 text-lg"
+            >
+              Create Your Own Contract 🚀
+            </Button>
+          </div>
         </div>
 
         {/* Bottom CTA */}
