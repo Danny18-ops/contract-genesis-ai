@@ -1,9 +1,9 @@
 
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
 import { RoommateFlow } from './RoommateFlow';
+import { FriendLoanFlow } from './FriendLoanFlow';
 import { useState } from 'react';
 
 interface GenZSectionProps {
@@ -75,6 +75,7 @@ const genZTemplates = [
 
 export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showRoommateFlow, setShowRoommateFlow] = useState(false);
+  const [showFriendLoanFlow, setShowFriendLoanFlow] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -82,6 +83,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     // Open custom flow for roommate agreements
     if (template.contractType === 'roommate') {
       setShowRoommateFlow(true);
+      return;
+    }
+    
+    // Open custom flow for friend loan agreements
+    if (template.contractType === 'friendLoan') {
+      setShowFriendLoanFlow(true);
       return;
     }
     
@@ -184,7 +191,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
         isOpen={showRoommateFlow}
         onClose={() => setShowRoommateFlow(false)}
       />
+
+      {/* Friend Loan Flow Modal */}
+      <FriendLoanFlow 
+        isOpen={showFriendLoanFlow}
+        onClose={() => setShowFriendLoanFlow(false)}
+      />
     </>
   );
 };
-
