@@ -1,9 +1,9 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
 import { RoommateFlow } from './RoommateFlow';
 import { FriendLoanFlow } from './FriendLoanFlow';
+import { GroupTripFlow } from './GroupTripFlow';
 import { useState } from 'react';
 
 interface GenZSectionProps {
@@ -76,6 +76,7 @@ const genZTemplates = [
 export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showRoommateFlow, setShowRoommateFlow] = useState(false);
   const [showFriendLoanFlow, setShowFriendLoanFlow] = useState(false);
+  const [showGroupTripFlow, setShowGroupTripFlow] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -89,6 +90,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     // Open custom flow for friend loan agreements
     if (template.contractType === 'friendLoan') {
       setShowFriendLoanFlow(true);
+      return;
+    }
+    
+    // Open custom flow for group trip agreements
+    if (template.contractType === 'groupTrip') {
+      setShowGroupTripFlow(true);
       return;
     }
     
@@ -196,6 +203,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
       <FriendLoanFlow 
         isOpen={showFriendLoanFlow}
         onClose={() => setShowFriendLoanFlow(false)}
+      />
+
+      {/* Group Trip Flow Modal */}
+      <GroupTripFlow 
+        isOpen={showGroupTripFlow}
+        onClose={() => setShowGroupTripFlow(false)}
       />
     </>
   );
