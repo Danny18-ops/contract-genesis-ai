@@ -4,6 +4,7 @@ import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react
 import { RoommateFlow } from './RoommateFlow';
 import { FriendLoanFlow } from './FriendLoanFlow';
 import { GroupTripFlow } from './GroupTripFlow';
+import { SharedSubscriptionsFlow } from './SharedSubscriptionsFlow';
 import { useState } from 'react';
 
 interface GenZSectionProps {
@@ -77,6 +78,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showRoommateFlow, setShowRoommateFlow] = useState(false);
   const [showFriendLoanFlow, setShowFriendLoanFlow] = useState(false);
   const [showGroupTripFlow, setShowGroupTripFlow] = useState(false);
+  const [showSharedSubscriptionsFlow, setShowSharedSubscriptionsFlow] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -96,6 +98,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     // Open custom flow for group trip agreements
     if (template.contractType === 'groupTrip') {
       setShowGroupTripFlow(true);
+      return;
+    }
+    
+    // Open custom flow for shared subscriptions
+    if (template.contractType === 'sharedSubscriptions') {
+      setShowSharedSubscriptionsFlow(true);
       return;
     }
     
@@ -209,6 +217,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
       <GroupTripFlow 
         isOpen={showGroupTripFlow}
         onClose={() => setShowGroupTripFlow(false)}
+      />
+
+      {/* Shared Subscriptions Flow Modal */}
+      <SharedSubscriptionsFlow 
+        isOpen={showSharedSubscriptionsFlow}
+        onClose={() => setShowSharedSubscriptionsFlow(false)}
       />
     </>
   );
