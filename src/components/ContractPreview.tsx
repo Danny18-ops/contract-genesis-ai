@@ -1,11 +1,12 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, Download, FileText, PenTool } from 'lucide-react';
 import { generateEnhancedPdf } from '@/utils/enhancedPdfGenerator';
 import { ContractSigningFlow } from './ContractSigningFlow';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ContractPreviewProps {
   contract: string;
@@ -25,6 +26,30 @@ export const ContractPreview = ({
   showSigningOption = false
 }: ContractPreviewProps) => {
   const [showSigningFlow, setShowSigningFlow] = useState(false);
+  const [signatures, setSignatures] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (contractId) {
+      fetchSignatures();
+    }
+  }, [contractId]);
+
+  const fetchSignatures = async () => {
+    if (!contractId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('digital_signatures')
+        .select('*')
+        .eq('contract_id', contractId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      setSignatures(data || []);
+    } catch (error) {
+      console.error('Error fetching signatures:', error);
+    }
+  };
 
   const handleDownloadPDF = () => {
     if (!contract) return;
@@ -32,12 +57,13 @@ export const ContractPreview = ({
     // Determine contract type from contractData
     const contractType = contractData?.contractType || 'default';
     
-    // Use enhanced PDF generator
+    // Use enhanced PDF generator with signatures
     const pdf = generateEnhancedPdf({
       contractType,
       contractData,
       contract,
-      template
+      template,
+      signatures: signatures.length > 0 ? signatures : undefined
     });
 
     // Generate filename based on contract data
@@ -113,6 +139,32 @@ export const ContractPreview = ({
         </CardContent>
       </Card>
 
+      {/* Show signature status if available */}
+      {signatures.length > 0 && (
+        <Card>
+          <CardContent className="p-6">
+            <h4 className="font-semibold mb-4">Signature Status</h4>
+            <div className="space-y-2">
+              {signatures.map((sig, index) => (
+                <div key={sig.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <span className="font-medium">{sig.signer_name}</span>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    sig.signature_status === 'signed' 
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {sig.signature_status === 'signed' 
+                      ? `Signed ${new Date(sig.signed_at).toLocaleDateString()}`
+                      : 'Pending'
+                    }
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Signing Flow Dialog */}
       <Dialog open={showSigningFlow} onOpenChange={setShowSigningFlow}>
         <DialogContent className="max-w-2xl">
@@ -122,7 +174,10 @@ export const ContractPreview = ({
           <ContractSigningFlow
             contractId={contractId!}
             contractTitle={contractData?.contractTitle || 'Contract'}
-            onClose={() => setShowSigningFlow(false)}
+            onClose={() => {
+              setShowSigningFlow(false);
+              fetchSignatures(); // Refresh signatures when closing
+            }}
           />
         </DialogContent>
       </Dialog>

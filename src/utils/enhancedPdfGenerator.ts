@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 
 interface PdfOptions {
@@ -6,6 +5,11 @@ interface PdfOptions {
   contractData: any;
   contract: string;
   template?: string;
+  signatures?: Array<{
+    signer_name: string;
+    signed_at: string;
+    signature_status: string;
+  }>;
 }
 
 interface ColorScheme {
@@ -183,7 +187,7 @@ export class EnhancedPdfGenerator {
     return currentY + 10;
   }
 
-  private addSignatureSection(contractType: string, parties: string[], y: number): number {
+  private addSignatureSection(contractType: string, signatures: any[] = [], y: number): number {
     const colors = this.colorSchemes[contractType] || this.colorSchemes.default;
     const margin = 20;
     
@@ -195,29 +199,78 @@ export class EnhancedPdfGenerator {
     
     y += 15;
     
-    parties.forEach((party, index) => {
-      if (y > 240) {
-        this.pdf.addPage();
-        y = 30;
-      }
-      
-      // Signature box
-      this.pdf.setLineWidth(0.5);
-      this.setColor(colors.primary);
-      this.pdf.rect(margin, y, 80, 20, 'S');
-      
-      // Party name
-      this.setColor(colors.text);
-      this.pdf.setFontSize(10);
-      this.pdf.setFont('helvetica', 'normal');
-      this.pdf.text(party, margin, y - 3);
-      
-      // Date box
-      this.pdf.rect(margin + 90, y, 50, 20, 'S');
-      this.pdf.text('Date:', margin + 92, y - 3);
-      
-      y += 35;
-    });
+    if (signatures && signatures.length > 0) {
+      // Add actual signatures with timestamps
+      signatures.forEach((signature, index) => {
+        if (y > 240) {
+          this.pdf.addPage();
+          y = 30;
+        }
+        
+        // Signature box with signed status
+        this.pdf.setLineWidth(0.5);
+        this.setColor(colors.primary);
+        this.pdf.rect(margin, y, 80, 25, 'S');
+        
+        // Party name and signature status
+        this.setColor(colors.text);
+        this.pdf.setFontSize(10);
+        this.pdf.setFont('helvetica', 'normal');
+        this.pdf.text(signature.signer_name, margin + 2, y - 3);
+        
+        if (signature.signature_status === 'signed') {
+          // Add "DIGITALLY SIGNED" text
+          this.setColor(colors.accent);
+          this.pdf.setFont('helvetica', 'bold');
+          this.pdf.text('DIGITALLY SIGNED', margin + 2, y + 8);
+          
+          // Add signature timestamp
+          this.setColor(colors.text);
+          this.pdf.setFont('helvetica', 'normal');
+          this.pdf.setFontSize(8);
+          const signedDate = new Date(signature.signed_at).toLocaleString();
+          this.pdf.text(`Signed: ${signedDate}`, margin + 2, y + 15);
+        }
+        
+        // Date box
+        this.pdf.rect(margin + 90, y, 50, 25, 'S');
+        this.pdf.setFontSize(10);
+        this.pdf.text('Date:', margin + 92, y - 3);
+        
+        if (signature.signature_status === 'signed') {
+          const signedDate = new Date(signature.signed_at).toLocaleDateString();
+          this.pdf.text(signedDate, margin + 92, y + 8);
+        }
+        
+        y += 35;
+      });
+    } else {
+      // Fallback to extracting parties from contract data
+      const parties = this.extractParties(this.contractData, contractType);
+      parties.forEach((party, index) => {
+        if (y > 240) {
+          this.pdf.addPage();
+          y = 30;
+        }
+        
+        // Signature box
+        this.pdf.setLineWidth(0.5);
+        this.setColor(colors.primary);
+        this.pdf.rect(margin, y, 80, 20, 'S');
+        
+        // Party name
+        this.setColor(colors.text);
+        this.pdf.setFontSize(10);
+        this.pdf.setFont('helvetica', 'normal');
+        this.pdf.text(party, margin, y - 3);
+        
+        // Date box
+        this.pdf.rect(margin + 90, y, 50, 20, 'S');
+        this.pdf.text('Date:', margin + 92, y - 3);
+        
+        y += 35;
+      });
+    }
     
     return y;
   }
@@ -270,7 +323,8 @@ export class EnhancedPdfGenerator {
   }
 
   public generateEnhancedPdf(options: PdfOptions): jsPDF {
-    const { contractType, contractData, contract } = options;
+    const { contractType, contractData, contract, signatures } = options;
+    this.contractData = contractData; // Store for extractParties fallback
     
     // Determine contract title
     const titles: { [key: string]: string } = {
@@ -300,21 +354,20 @@ export class EnhancedPdfGenerator {
       currentY = this.addSection(section.title, section.content, currentY, contractType);
     });
     
-    // Add signature section
-    const parties = this.extractParties(contractData, contractType);
-    if (parties.length > 0) {
-      if (currentY > 200) {
-        this.pdf.addPage();
-        currentY = 30;
-      }
-      currentY = this.addSignatureSection(contractType, parties, currentY + 10);
+    // Add signature section with actual signatures if available
+    if (currentY > 200) {
+      this.pdf.addPage();
+      currentY = 30;
     }
+    currentY = this.addSignatureSection(contractType, signatures, currentY + 10);
     
     // Add footer
     this.addFooter(contractType);
     
     return this.pdf;
   }
+
+  private contractData: any; // Store contract data for extractParties
 
   private extractParties(contractData: any, contractType: string): string[] {
     const parties: string[] = [];

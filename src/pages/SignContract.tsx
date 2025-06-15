@@ -35,9 +35,9 @@ const SignContract = () => {
   const fetchSigningData = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('contract-signing', {
-        body: {},
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -67,10 +67,7 @@ const SignContract = () => {
         body: {
           signingToken: token,
           signatureData
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        }
       });
 
       if (error) throw error;
@@ -253,8 +250,9 @@ const SignContract = () => {
                 onClick={() => setShowSignature(true)}
                 className="bg-blue-600 hover:bg-blue-700"
                 size="lg"
+                disabled={signing}
               >
-                Sign Contract
+                {signing ? 'Signing...' : 'Sign Contract'}
               </Button>
             </CardContent>
           </Card>
