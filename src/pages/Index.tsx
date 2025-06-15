@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
@@ -369,22 +370,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Disclaimer Section */}
-          <div className="mt-16 mb-8">
-            <div className="bg-amber-50/90 backdrop-blur-md border border-amber-200 rounded-2xl p-6 max-w-4xl mx-auto">
-              <div className="flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="text-lg font-semibold text-amber-800 mb-2">Important Disclaimer</h3>
-                  <p className="text-amber-700 text-sm leading-relaxed">
-                    GenContract generates contracts for convenience and standardization. These documents do not constitute legal advice. 
-                    We recommend consulting a qualified attorney before signing any agreement. GenContract is not responsible for outcomes from using these contracts.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Template Toggle */}
           <div className="flex items-center justify-center gap-4 mb-12">
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 flex items-center gap-4">
@@ -474,6 +459,22 @@ const Index = () => {
             <p className="text-white/80 text-sm backdrop-blur-sm bg-white/5 inline-block px-6 py-2 rounded-full border border-white/10">
               Designed and idea by <span className="font-semibold text-white">Dnyaneshwari Raut</span>
             </p>
+          </div>
+
+          {/* Disclaimer Section - Moved to very bottom */}
+          <div className="mt-8 mb-8">
+            <div className="bg-amber-50/90 backdrop-blur-md border border-amber-200 rounded-2xl p-6 max-w-4xl mx-auto">
+              <div className="flex items-start gap-4">
+                <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-lg font-semibold text-amber-800 mb-2">Important Disclaimer</h3>
+                  <p className="text-amber-700 text-sm leading-relaxed">
+                    GenContract generates contracts for convenience and standardization. These documents do not constitute legal advice. 
+                    We recommend consulting a qualified attorney before signing any agreement. GenContract is not responsible for outcomes from using these contracts.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
