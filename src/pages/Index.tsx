@@ -13,11 +13,13 @@ const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [contractData, setContractData] = useState<any>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState('modern');
 
   const handleContractGenerate = (data: any) => {
     setContractData(data);
     setIsGenerating(true);
-    
+    setSelectedTemplate(data.template || 'modern');
+
     // Generate comprehensive contract using the detailed generator
     setTimeout(() => {
       const detailedContract = generateDetailedContract(data);
@@ -45,7 +47,8 @@ const Index = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&h=1080&fit=crop&crop=center')`
+          // Changed to an abstract contract background (no man)
+          backgroundImage: `url('https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1920&h=1080&fit=crop&crop=center')`
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/95 via-indigo-900/90 to-purple-900/95" />
@@ -131,6 +134,7 @@ const Index = () => {
                   isGenerating={isGenerating}
                   contractData={contractData}
                   onSaveContract={user ? handleSaveContract : undefined}
+                  template={selectedTemplate}
                 />
               </div>
             </div>
