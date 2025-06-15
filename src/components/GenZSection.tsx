@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
@@ -83,6 +82,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showGroupTripFlow, setShowGroupTripFlow] = useState(false);
   const [showSharedSubscriptionsFlow, setShowSharedSubscriptionsFlow] = useState(false);
   const [showEventHostingFlow, setShowEventHostingFlow] = useState(false);
+  const [showCasualBorrowingFlow, setShowCasualBorrowingFlow] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -114,6 +114,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     // Open custom flow for event hosting
     if (template.contractType === 'eventHosting') {
       setShowEventHostingFlow(true);
+      return;
+    }
+    
+    // Open custom flow for casual borrowing
+    if (template.contractType === 'casualBorrowing') {
+      setShowCasualBorrowingFlow(true);
       return;
     }
     
@@ -239,6 +245,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
       <EventHostingFlow 
         isOpen={showEventHostingFlow}
         onClose={() => setShowEventHostingFlow(false)}
+      />
+
+      {/* Casual Borrowing Flow Modal */}
+      <CasualBorrowingFlow 
+        isOpen={showCasualBorrowingFlow}
+        onClose={() => setShowCasualBorrowingFlow(false)}
       />
     </>
   );
