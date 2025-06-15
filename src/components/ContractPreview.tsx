@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Download, FileText } from 'lucide-react';
-import jsPDF from 'jspdf';
+import { generateEnhancedPdf } from '@/utils/enhancedPdfGenerator';
 
 interface ContractPreviewProps {
   contract: string;
@@ -20,23 +20,15 @@ export const ContractPreview = ({
   const handleDownloadPDF = () => {
     if (!contract) return;
 
-    const pdf = new jsPDF();
-    const pageHeight = pdf.internal.pageSize.height;
-    const margin = 20;
-    const lineHeight = 7;
-    const maxWidth = pdf.internal.pageSize.width - 2 * margin;
-
-    // Split contract into lines that fit the page width
-    const lines = pdf.splitTextToSize(contract, maxWidth);
-    let yPosition = margin;
-
-    lines.forEach((line: string) => {
-      if (yPosition > pageHeight - margin) {
-        pdf.addPage();
-        yPosition = margin;
-      }
-      pdf.text(line, margin, yPosition);
-      yPosition += lineHeight;
+    // Determine contract type from contractData
+    const contractType = contractData?.contractType || 'default';
+    
+    // Use enhanced PDF generator
+    const pdf = generateEnhancedPdf({
+      contractType,
+      contractData,
+      contract,
+      template
     });
 
     // Generate filename based on contract data
@@ -87,9 +79,9 @@ export const ContractPreview = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Contract Preview</h3>
-        <Button onClick={handleDownloadPDF} className="flex items-center gap-2">
+        <Button onClick={handleDownloadPDF} className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
           <Download className="w-4 h-4" />
-          Download PDF
+          Download Enhanced PDF
         </Button>
       </div>
       
