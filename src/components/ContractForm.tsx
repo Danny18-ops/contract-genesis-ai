@@ -30,6 +30,7 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
   const [savedOrgData, setSavedOrgData] = useState<Organization | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [showDateValidationDialog, setShowDateValidationDialog] = useState(false);
+  const [addressValid, setAddressValid] = useState(true);
   const { organization, saveOrganization, clearOrganization } = useOrganization();
   const { toast } = useToast();
 
@@ -99,7 +100,6 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
       });
       return;
     }
-    
     // Validate phone number format
     if (field === 'phone' && value && !/^\d*$/.test(value)) {
       toast({
@@ -109,7 +109,18 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
       });
       return;
     }
-    
+    // Validate address contains 'USA' (case-insensitive)
+    if (field === 'address') {
+      const isUSA = /usa/i.test(value);
+      setAddressValid(isUSA || value.trim() === "");
+      if (!isUSA && value.trim() !== "") {
+        toast({
+          title: "Invalid Address",
+          description: "For security, the entered address must be in the USA.",
+          variant: "destructive"
+        });
+      }
+    }
     setOrganizationData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -212,6 +223,12 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
       if (!validateContractDuration(dynamicFields.startDate, dynamicFields.endDate)) {
         errors.push("End date must be after start date");
       }
+    }
+
+    // Check address validity
+    if (!organizationData.address || !/usa/i.test(organizationData.address)) {
+      errors.push("Organization address must be in the USA.");
+      setAddressValid(false);
     }
 
     if (errors.length > 0) {
@@ -467,15 +484,23 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
             </div>
             <div>
               <Label htmlFor="orgAddress" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
-                Address
+                Address <span className="text-red-600">*</span>
               </Label>
               <Input
                 type="text"
                 id="orgAddress"
-                placeholder="Enter address"
+                placeholder="Enter address (must be USA)"
                 value={organizationData.address}
                 onChange={(e) => handleOrgDataChange('address', e.target.value)}
+                className={!addressValid ? 'border-red-500' : ''}
               />
+              {/* Warning if address isn't US based */}
+              {!addressValid && organizationData.address && (
+                <div className="mt-2 text-xs text-red-600 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-.011-.011L12 15m0-12a9 9 0 110 18 9 9 0 010-18zm0 5v4" /></svg>
+                  For security, the entered address must be in the USA.
+                </div>
+              )}
             </div>
             <div>
               <Label htmlFor="orgEmail" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">

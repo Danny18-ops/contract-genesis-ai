@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -58,6 +57,7 @@ export const ContractPreview = ({
     contractData?.organizationData?.name || 
     contractData?.organizationData?.orgName || 
     '';
+  const orgAddress = contractData?.organizationData?.address || '';
 
   // For preview
   const style = templateStyles[template] || templateStyles['modern'];
@@ -216,6 +216,9 @@ export const ContractPreview = ({
         {orgName && (
           <div className="text-lg font-bold mb-2 text-center">{orgName}</div>
         )}
+        {orgAddress && (
+          <div className="text-sm text-gray-500 mb-4 text-center">{orgAddress}</div>
+        )}
         <div className={style.title}>
           {(contractData?.contractType === 'rental' && 'Rental Agreement')
                       || (contractData?.contractType === 'jobOffer' && 'Job Offer Letter')
@@ -236,6 +239,13 @@ export const ContractPreview = ({
         {contractData?.footerText && (
           <div className="border-t mt-8 pt-4 text-xs text-gray-500 text-center">
             {contractData.footerText}
+          </div>
+        )}
+        {/* USA address validation warning inside preview, if needed */}
+        {contractData?.organizationData && orgAddress && !/usa/i.test(orgAddress) && (
+          <div className="mt-6 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 text-center flex items-center justify-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-.011-.011L12 15m0-12a9 9 0 110 18 9 9 0 010-18zm0 5v4" /></svg>
+            Warning: Organization address must be in the USA for security reasons.
           </div>
         )}
       </div>
