@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
@@ -15,7 +14,7 @@ const genZTemplates = [
     icon: Users,
     gradient: 'from-blue-500 to-cyan-500',
     bgColor: 'bg-blue-50',
-    example: 'Roommate owes ₹2000 for WiFi? That\'s contract-worthy.',
+    example: 'Roommate owes $200 for WiFi? That\'s contract-worthy.',
     contractType: 'roommate'
   },
   {
