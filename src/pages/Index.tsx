@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
@@ -140,7 +139,10 @@ const Index = () => {
             <div className="flex items-center justify-center">
               <div className="flex items-center gap-3">
                 <FileText className="w-8 h-8 text-white" />
-                <span className="text-2xl font-bold text-white">GenContract</span>
+                <span className="text-2xl font-bold">
+                  <span className="text-white">Gen</span>
+                  <span className="text-pink-400">Contract</span>
+                </span>
               </div>
             </div>
           </div>
@@ -154,8 +156,9 @@ const Index = () => {
                 <FileText className="w-12 h-12 text-white drop-shadow-lg" />
               </div>
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
-              GenContract
+            <h1 className="text-6xl md:text-7xl font-bold mb-6 drop-shadow-2xl">
+              <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">Gen</span>
+              <span className="bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 bg-clip-text text-transparent">Contract</span>
             </h1>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Whether it's a party or a property lease, make your agreements official in minutes.
