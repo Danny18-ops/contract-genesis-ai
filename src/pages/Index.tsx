@@ -2,16 +2,11 @@
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
-import { AuthHeader } from '@/components/AuthHeader';
-import { useAuth } from '@/contexts/AuthContext';
-import { useContracts } from '@/hooks/use-contracts';
 import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
 import { generateDetailedContract } from '@/utils/detailedContractGenerator';
 import { GenZSection } from '@/components/GenZSection';
 
 const Index = () => {
-  const { user } = useAuth();
-  const { saveContract } = useContracts();
   const [generatedContract, setGeneratedContract] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [contractData, setContractData] = useState<any>(null);
@@ -33,19 +28,6 @@ const Index = () => {
     }, 2000);
   };
 
-  const handleSaveContract = async () => {
-    if (!user || !generatedContract || !contractData) {
-      return;
-    }
-
-    try {
-      const title = `${contractData.contractType} - ${new Date().toLocaleDateString()}`;
-      await saveContract(title, contractData.contractType, generatedContract, contractData);
-    } catch (error) {
-      console.error('Failed to save contract:', error);
-    }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -65,7 +47,17 @@ const Index = () => {
       
       {/* Content */}
       <div className="relative z-10">
-        <AuthHeader />
+        {/* Simple Header */}
+        <header className="relative z-20 bg-white/10 backdrop-blur-md border-b border-white/20">
+          <div className="container mx-auto px-6 py-4">
+            <div className="flex items-center justify-center">
+              <div className="flex items-center gap-3">
+                <FileText className="w-8 h-8 text-white" />
+                <span className="text-2xl font-bold text-white">GenContract</span>
+              </div>
+            </div>
+          </div>
+        </header>
         
         {/* Enhanced Hero Section */}
         <div className="container mx-auto px-6 py-12">
@@ -143,7 +135,6 @@ const Index = () => {
                   contract={generatedContract}
                   isGenerating={isGenerating}
                   contractData={contractData}
-                  onSaveContract={user ? handleSaveContract : undefined}
                   template={selectedTemplate}
                 />
               </div>
