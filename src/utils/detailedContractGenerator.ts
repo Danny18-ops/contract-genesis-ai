@@ -18,7 +18,7 @@ export const generateDetailedContract = (data: any): string => {
 
   // Handle flexible contract type
   if (contractType === 'flexible') {
-    return generateFlexibleContract(data, t);
+    return generateFlexibleContract(data);
   }
 
   switch (contractType) {
@@ -591,7 +591,7 @@ ${org.name || '[PARTY 1 NAME]'}                    ${fields.party2 || '[PARTY 2 
 Date: _________________            Date: _________________`;
 };
 
-const generateFlexibleContract = (data: any, t: any): string => {
+const generateFlexibleContract = (data: any): string => {
   const { organizationData, dynamicFields } = data;
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
