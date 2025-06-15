@@ -7,6 +7,7 @@ import { FriendLoanFlow } from './FriendLoanFlow';
 import { GroupTripFlow } from './GroupTripFlow';
 import { SharedSubscriptionsFlow } from './SharedSubscriptionsFlow';
 import { EventHostingFlow } from './EventHostingFlow';
+import { CasualBorrowingFlow } from './CasualBorrowingFlow';
 import { useState } from 'react';
 
 interface GenZSectionProps {
