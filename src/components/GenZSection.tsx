@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee, FileText } from 'lucide-react';
@@ -8,6 +7,7 @@ import { GroupTripFlow } from './GroupTripFlow';
 import { SharedSubscriptionsFlow } from './SharedSubscriptionsFlow';
 import { EventHostingFlow } from './EventHostingFlow';
 import { CasualBorrowingFlow } from './CasualBorrowingFlow';
+import { FlexibleContractBuilder } from './FlexibleContractBuilder';
 import { useState } from 'react';
 
 interface GenZSectionProps {
@@ -84,6 +84,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showSharedSubscriptionsFlow, setShowSharedSubscriptionsFlow] = useState(false);
   const [showEventHostingFlow, setShowEventHostingFlow] = useState(false);
   const [showCasualBorrowingFlow, setShowCasualBorrowingFlow] = useState(false);
+  const [showFlexibleBuilder, setShowFlexibleBuilder] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -150,11 +151,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   };
 
   const handleCreateYourOwn = () => {
-    // Scroll to the contract builder section
-    const contractBuilder = document.querySelector('.contract-builder-section');
-    if (contractBuilder) {
-      contractBuilder.scrollIntoView({ behavior: 'smooth' });
-    }
+    setShowFlexibleBuilder(true);
   };
 
   return (
@@ -214,7 +211,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
               Need Something Custom?
             </h3>
             <p className="text-white/90 mb-6 drop-shadow-md">
-              Create your own contract with our full builder for any type of agreement
+              Create your own contract with our flexible builder for any type of agreement
             </p>
             <Button 
               onClick={handleCreateYourOwn}
@@ -232,7 +229,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
               Ready to Make Any Agreement Official?
             </h3>
             <p className="text-white/90 mb-6 drop-shadow-md">
-              Use our full contract builder below for custom agreements, or choose a quick template above for instant contracts.
+              Use our flexible contract builder above for custom agreements, or choose a quick template.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="bg-white/20 px-6 py-3 rounded-xl text-white font-medium">
@@ -249,40 +246,42 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
         </div>
       </div>
 
-      {/* Roommate Flow Modal */}
+      {/* Existing Flow Modals */}
       <RoommateFlow 
         isOpen={showRoommateFlow}
         onClose={() => setShowRoommateFlow(false)}
       />
 
-      {/* Friend Loan Flow Modal */}
       <FriendLoanFlow 
         isOpen={showFriendLoanFlow}
         onClose={() => setShowFriendLoanFlow(false)}
       />
 
-      {/* Group Trip Flow Modal */}
       <GroupTripFlow 
         isOpen={showGroupTripFlow}
         onClose={() => setShowGroupTripFlow(false)}
       />
 
-      {/* Shared Subscriptions Flow Modal */}
       <SharedSubscriptionsFlow 
         isOpen={showSharedSubscriptionsFlow}
         onClose={() => setShowSharedSubscriptionsFlow(false)}
       />
 
-      {/* Event Hosting Flow Modal */}
       <EventHostingFlow 
         isOpen={showEventHostingFlow}
         onClose={() => setShowEventHostingFlow(false)}
       />
 
-      {/* Casual Borrowing Flow Modal */}
       <CasualBorrowingFlow 
         isOpen={showCasualBorrowingFlow}
         onClose={() => setShowCasualBorrowingFlow(false)}
+      />
+
+      {/* Flexible Contract Builder Modal */}
+      <FlexibleContractBuilder 
+        isOpen={showFlexibleBuilder}
+        onClose={() => setShowFlexibleBuilder(false)}
+        onContractGenerate={onQuickContract}
       />
     </>
   );
