@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
-import { FileText, Sparkles, Download, Shield, Zap, Briefcase, Home, Car, Package, User, Users, Award, Handshake } from 'lucide-react';
+import { FileText, Sparkles, Download, Shield, Zap, Briefcase, Home, Car, Package, User, Users, Award, Handshake, AlertTriangle } from 'lucide-react';
 import { generateDetailedContract } from '@/utils/detailedContractGenerator';
 import { GenZSection } from '@/components/GenZSection';
 import { Card, CardContent } from '@/components/ui/card';
@@ -365,6 +365,22 @@ const Index = () => {
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
                 <Zap className="w-6 h-6 text-orange-300 drop-shadow-lg" />
                 <span className="text-sm font-bold text-white drop-shadow-md">Quick Templates</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Disclaimer Section */}
+          <div className="mt-16 mb-8">
+            <div className="bg-amber-50/90 backdrop-blur-md border border-amber-200 rounded-2xl p-6 max-w-4xl mx-auto">
+              <div className="flex items-start gap-4">
+                <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-lg font-semibold text-amber-800 mb-2">Important Disclaimer</h3>
+                  <p className="text-amber-700 text-sm leading-relaxed">
+                    GenContract generates contracts for convenience and standardization. These documents do not constitute legal advice. 
+                    We recommend consulting a qualified attorney before signing any agreement. GenContract is not responsible for outcomes from using these contracts.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
