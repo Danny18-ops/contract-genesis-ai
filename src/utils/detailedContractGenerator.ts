@@ -123,56 +123,132 @@ Date: _________________            Date: _________________
 };
 
 const generateJobOfferLetter = (org: any, fields: any, date: string): string => {
-  return `JOB OFFER LETTER
+  const startDate = fields.startDate ? new Date(fields.startDate).toLocaleDateString() : '[START DATE]';
+  const responseDeadline = fields.responseDeadline ? new Date(fields.responseDeadline).toLocaleDateString() : '[RESPONSE DEADLINE]';
+  
+  return `OFFICIAL JOB OFFER LETTER
 
 ${date}
 
 ${fields.candidate || '[CANDIDATE NAME]'}
 ${fields.candidateAddress || '[CANDIDATE ADDRESS]'}
+${fields.candidateEmail || '[CANDIDATE EMAIL]'}
+${fields.candidatePhone || '[CANDIDATE PHONE]'}
 
 Dear ${fields.candidate || '[CANDIDATE NAME]'},
 
-We are pleased to extend an offer of employment for the position of ${fields.jobTitle || '[JOB TITLE]'} with ${org.name || '[COMPANY NAME]'}. We believe your skills and experience will be a valuable addition to our team.
+We are delighted to extend an offer of employment for the position of ${fields.jobTitle || '[JOB TITLE]'} with ${org.name || '[COMPANY NAME]'}. After careful consideration of your qualifications and interview performance, we believe you will be an excellent addition to our team.
+
+═══════════════════════════════════════════════════════════════════════════════
 
 POSITION DETAILS
-Position: ${fields.jobTitle || '[JOB TITLE]'}
+
+Position Title: ${fields.jobTitle || '[JOB TITLE]'}
 Department: ${fields.department || '[DEPARTMENT]'}
-Start Date: ${fields.startDate || '[START DATE]'}
 Reports To: ${fields.supervisor || '[SUPERVISOR NAME]'}
+Employment Type: ${fields.employmentType || 'Full-time'}
+Start Date: ${startDate}
+Work Location: ${fields.workLocation || org.address || '[WORK LOCATION]'}
+Work Schedule: ${fields.workSchedule || 'Monday to Friday, 9:00 AM - 5:00 PM'}
 
-COMPENSATION AND BENEFITS
-Annual Salary: $${fields.salary || '[SALARY]'}
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPENSATION PACKAGE
+
+Annual Salary: $${fields.salary || '[ANNUAL SALARY]'}
 Payment Schedule: ${fields.paySchedule || 'Bi-weekly'}
+${fields.hourlyRate ? `Hourly Rate: $${fields.hourlyRate}` : ''}
+${fields.bonusStructure ? `Bonus Structure: ${fields.bonusStructure}` : ''}
 
-Benefits include:
-- Health Insurance
-- Dental Insurance
-- Vision Insurance
-- 401(k) Plan with company matching
-- Paid Time Off (PTO)
-- Sick Leave
-- ${fields.additionalBenefits || 'Additional benefits as outlined in the employee handbook'}
+Performance Reviews: ${fields.performanceReview || 'Annual performance reviews with potential salary adjustments'}
 
-EMPLOYMENT TYPE
-This is a ${fields.employmentType || 'full-time'} position. Your employment with ${org.name} will be at-will, meaning that either you or the company may terminate the employment relationship at any time, with or without cause or notice.
+═══════════════════════════════════════════════════════════════════════════════
 
-DUTIES AND RESPONSIBILITIES
-Your primary responsibilities will include:
-${fields.responsibilities || '- [PRIMARY RESPONSIBILITIES]\n- [ADDITIONAL DUTIES AS ASSIGNED]\n- [OTHER RELEVANT TASKS]'}
+COMPREHENSIVE BENEFITS PACKAGE
 
-CONFIDENTIALITY
-You will be required to sign a confidentiality agreement protecting proprietary information and trade secrets of ${org.name}.
+Health & Wellness:
+• Medical Insurance (${fields.healthInsurance || 'Company pays 80% of premium'})
+• Dental Insurance (${fields.dentalInsurance || 'Company pays 100% of premium'})
+• Vision Insurance (${fields.visionInsurance || 'Company pays 100% of premium'})
+• ${fields.healthSavingsAccount ? 'Health Savings Account (HSA) with company contribution' : 'Health benefits as per company policy'}
 
-CONDITIONS OF EMPLOYMENT
-This offer is contingent upon:
-- Successful completion of background check
-- Verification of employment eligibility
-- ${fields.additionalConditions || 'Any additional conditions as required'}
+Retirement & Financial:
+• 401(k) Plan with ${fields.retirementMatch || '4%'} company matching
+• ${fields.stockOptions ? 'Stock options eligible after 1 year of employment' : ''}
+• ${fields.lifeInsurance ? 'Life Insurance coverage' : 'Basic life insurance provided'}
 
-ACCEPTANCE
-Please confirm your acceptance of this offer by signing and returning this letter by ${fields.responseDeadline || '[RESPONSE DEADLINE]'}. If you have any questions, please contact me at ${org.phone || '[PHONE]'} or ${org.email || '[EMAIL]'}.
+Time Off & Leave:
+• Paid Time Off (PTO): ${fields.vacationDays || '15'} days annually (increases with tenure)
+• Sick Leave: ${fields.sickDays || '10'} days annually
+• Personal Days: ${fields.personalDays || '3'} days annually
+• Federal and State Holidays: ${fields.holidays || '11 observed holidays'}
+• ${fields.parentalLeave ? 'Parental Leave: 12 weeks paid' : 'Parental leave as per company policy'}
 
-We look forward to welcoming you to our team!
+Professional Development:
+• Annual Learning Budget: $${fields.learningBudget || '1,500'}
+• Conference Attendance Support
+• ${fields.tuitionReimbursement ? 'Tuition Reimbursement Program' : 'Professional development opportunities'}
+
+Additional Perks:
+${fields.additionalBenefits || '• Flexible work arrangements\n• Remote work options\n• Employee wellness programs\n• Company events and team building\n• Free snacks and beverages'}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PRIMARY RESPONSIBILITIES & EXPECTATIONS
+
+Your key responsibilities will include:
+
+${fields.responsibilities || `• Lead ${fields.jobTitle?.toLowerCase() || 'assigned'} projects and initiatives
+• Collaborate with cross-functional teams to achieve department goals
+• Maintain high standards of quality and professionalism
+• Participate in team meetings and strategic planning sessions
+• Contribute to company culture and values
+• Other duties as assigned by your supervisor`}
+
+Performance Expectations:
+• Meet or exceed quarterly performance goals
+• Maintain professional development through continuous learning
+• Adhere to company policies, procedures, and code of conduct
+• ${fields.performanceExpectations || 'Demonstrate leadership qualities and collaborative spirit'}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EMPLOYMENT TERMS & CONDITIONS
+
+Employment Classification: ${fields.employmentClassification || 'At-will employment'}
+Probationary Period: ${fields.probationaryPeriod || '90 days'}
+
+Confidentiality & Non-Disclosure:
+You will be required to sign our standard confidentiality agreement protecting proprietary information, trade secrets, and client data of ${org.name}.
+
+${fields.nonCompeteClause ? `Non-Compete Agreement: ${fields.nonCompeteClause}` : ''}
+${fields.nonSolicitationClause ? `Non-Solicitation Agreement: ${fields.nonSolicitationClause}` : ''}
+
+Background Check: This offer is contingent upon successful completion of:
+• Background verification
+• Employment eligibility verification (I-9)
+• ${fields.drugTest ? 'Drug screening' : ''}
+• ${fields.creditCheck ? 'Credit check (if applicable to role)' : ''}
+• Reference checks from previous employers
+
+═══════════════════════════════════════════════════════════════════════════════
+
+NEXT STEPS
+
+To accept this offer:
+1. Sign and return this letter by ${responseDeadline}
+2. Complete and return the enclosed new hire paperwork
+3. Schedule your first day orientation with HR
+4. Provide required documentation for I-9 verification
+
+Questions? Please contact:
+${fields.hrContact || fields.hiringManager || '[HR CONTACT]'}
+Email: ${fields.hrEmail || org.email || '[HR EMAIL]'}
+Phone: ${fields.hrPhone || org.phone || '[HR PHONE]'}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+We are excited about the possibility of you joining our team and look forward to your positive response. Welcome to the ${org.name} family!
 
 Sincerely,
 
@@ -181,12 +257,25 @@ ${fields.hiringManager || '[HIRING MANAGER NAME]'}
 ${fields.hiringManagerTitle || '[TITLE]'}
 ${org.name}
 
-ACCEPTANCE:
+Email: ${fields.hiringManagerEmail || org.email || '[EMAIL]'}
+Phone: ${org.phone || '[PHONE]'}
 
-I accept the above offer of employment and agree to the terms and conditions stated herein.
+═══════════════════════════════════════════════════════════════════════════════
 
-_________________________          Date: _________________
-${fields.candidate || '[CANDIDATE NAME]'}`;
+CANDIDATE ACCEPTANCE
+
+I, ${fields.candidate || '[CANDIDATE NAME]'}, accept the above offer of employment and agree to all terms and conditions stated herein.
+
+Candidate Signature: _________________________    Date: _________________
+${fields.candidate || '[CANDIDATE NAME]'}
+
+Print Name: _________________________
+
+Expected Start Date: ${startDate}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+This offer letter supersedes any previous verbal or written communications regarding your employment with ${org.name}. This letter does not constitute a contract of employment for any specific duration.`;
 };
 
 const generateBusinessAgreement = (org: any, fields: any, date: string): string => {
