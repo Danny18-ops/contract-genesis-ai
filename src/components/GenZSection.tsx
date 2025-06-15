@@ -1,3 +1,4 @@
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
@@ -5,6 +6,7 @@ import { RoommateFlow } from './RoommateFlow';
 import { FriendLoanFlow } from './FriendLoanFlow';
 import { GroupTripFlow } from './GroupTripFlow';
 import { SharedSubscriptionsFlow } from './SharedSubscriptionsFlow';
+import { EventHostingFlow } from './EventHostingFlow';
 import { useState } from 'react';
 
 interface GenZSectionProps {
@@ -79,6 +81,7 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
   const [showFriendLoanFlow, setShowFriendLoanFlow] = useState(false);
   const [showGroupTripFlow, setShowGroupTripFlow] = useState(false);
   const [showSharedSubscriptionsFlow, setShowSharedSubscriptionsFlow] = useState(false);
+  const [showEventHostingFlow, setShowEventHostingFlow] = useState(false);
 
   const handleQuickTemplate = (template: any) => {
     console.log('Quick template clicked:', template.contractType);
@@ -104,6 +107,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
     // Open custom flow for shared subscriptions
     if (template.contractType === 'sharedSubscriptions') {
       setShowSharedSubscriptionsFlow(true);
+      return;
+    }
+    
+    // Open custom flow for event hosting
+    if (template.contractType === 'eventHosting') {
+      setShowEventHostingFlow(true);
       return;
     }
     
@@ -223,6 +232,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
       <SharedSubscriptionsFlow 
         isOpen={showSharedSubscriptionsFlow}
         onClose={() => setShowSharedSubscriptionsFlow(false)}
+      />
+
+      {/* Event Hosting Flow Modal */}
+      <EventHostingFlow 
+        isOpen={showEventHostingFlow}
+        onClose={() => setShowEventHostingFlow(false)}
       />
     </>
   );
