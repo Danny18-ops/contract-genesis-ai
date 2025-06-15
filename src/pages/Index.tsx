@@ -313,44 +313,6 @@ const Index = () => {
             <GenZSection onQuickContract={handleContractGenerate} />
           )}
 
-          {/* Main Content */}
-          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mt-16 contract-builder-section">
-            {/* Contract Form */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20" />
-                <div className="relative z-10">
-                  <h2 className="text-3xl font-bold text-white drop-shadow-lg">Contract Builder</h2>
-                  <p className="text-blue-100 mt-3 text-lg drop-shadow-md">Fill in details or use quick templates to generate your contract</p>
-                </div>
-              </div>
-              <div className="p-8 max-h-[800px] overflow-y-auto">
-                <ContractForm 
-                  onContractGenerate={handleContractGenerate}
-                  isGenerating={isGenerating}
-                />
-              </div>
-            </div>
-
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-gray-800/20" />
-                <div className="relative z-10">
-                  <h2 className="text-3xl font-bold text-white drop-shadow-lg">Contract Preview</h2>
-                  <p className="text-gray-200 mt-3 text-lg drop-shadow-md">Your generated contract will appear here</p>
-                </div>
-              </div>
-              <div className="p-8 max-h-[800px] overflow-y-auto">
-                <ContractPreview 
-                  contract={generatedContract}
-                  isGenerating={isGenerating}
-                  contractData={contractData}
-                  template={selectedTemplate}
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Footer Credit */}
           <div className="text-center mt-16 py-8 border-t border-white/20">
             <p className="text-white/80 text-sm backdrop-blur-sm bg-white/5 inline-block px-6 py-2 rounded-full border border-white/10">
