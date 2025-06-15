@@ -280,6 +280,7 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
         <EnhancedContractTypeSelector 
           onContractTypeChange={setContractType}
           selectedType={contractType}
+          onContractGenerate={onContractGenerate}
         />
 
         {/* Dynamic Fields - based on contract type */}

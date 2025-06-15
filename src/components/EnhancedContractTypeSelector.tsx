@@ -1,73 +1,135 @@
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
-import { ContractTypeIcon, getContractTypeGradient, getContractTypeImage } from './ContractTypeIcon';
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ContractTypeIcon } from './ContractTypeIcon';
+import { ProfessionalRentalForm } from './ProfessionalRentalForm';
 
 interface EnhancedContractTypeSelectorProps {
   onContractTypeChange: (type: string) => void;
   selectedType: string;
+  onContractGenerate?: (contractData: any) => void;
 }
 
-export const EnhancedContractTypeSelector = ({ onContractTypeChange, selectedType }: EnhancedContractTypeSelectorProps) => {
+export const EnhancedContractTypeSelector = ({ 
+  onContractTypeChange, 
+  selectedType,
+  onContractGenerate 
+}: EnhancedContractTypeSelectorProps) => {
+  const [showProfessionalRental, setShowProfessionalRental] = useState(false);
+
+  const contractTypes = [
+    {
+      id: 'rental',
+      title: 'Rental Agreement',
+      description: 'Lease agreements for residential properties',
+      badge: 'Popular',
+      badgeColor: 'default' as const
+    },
+    {
+      id: 'jobOffer',
+      title: 'Job Offer Letter',
+      description: 'Employment contracts with salary and benefits',
+      badge: 'Professional',
+      badgeColor: 'secondary' as const
+    },
+    {
+      id: 'business',
+      title: 'Business Contract',
+      description: 'Service agreements and business partnerships',
+      badge: 'Enterprise',
+      badgeColor: 'outline' as const
+    },
+    {
+      id: 'carRental',
+      title: 'Car Rental Agreement',
+      description: 'Vehicle rental terms and conditions',
+      badge: 'Travel',
+      badgeColor: 'destructive' as const
+    }
+  ];
+
+  const handleCardClick = (contractType: string) => {
+    onContractTypeChange(contractType);
+  };
+
+  const handleProfessionalContractGenerate = (contractData: any) => {
+    if (onContractGenerate) {
+      onContractGenerate(contractData);
+    }
+  };
+
   return (
-    <Card className="border-blue-100 bg-blue-50/30 overflow-hidden">
-      <CardContent className="p-0">
-        {selectedType && (
-          <div className="h-32 relative overflow-hidden">
-            <img
-              src={getContractTypeImage(selectedType)}
-              alt={`${selectedType} contract`}
-              className="w-full h-full object-cover"
-            />
-            <div className={`absolute inset-0 bg-gradient-to-r ${getContractTypeGradient(selectedType)} opacity-75`} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white">
-                <ContractTypeIcon contractType={selectedType} className="w-8 h-8 mx-auto mb-2" />
-                <h3 className="font-bold text-lg capitalize">{selectedType.replace(/([A-Z])/g, ' $1')} Contract</h3>
+    <div className="space-y-4">
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Choose Your Contract Type</h3>
+        <p className="text-gray-600 text-sm">Select the type of contract you want to create</p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {contractTypes.map((contract) => (
+          <Card 
+            key={contract.id}
+            className={`cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
+              selectedType === contract.id 
+                ? 'border-blue-500 bg-blue-50' 
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => handleCardClick(contract.id)}
+          >
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3">
+                  <ContractTypeIcon type={contract.id} className="w-8 h-8" />
+                  <div>
+                    <CardTitle className="text-base">{contract.title}</CardTitle>
+                    <Badge variant={contract.badgeColor} className="mt-1">
+                      {contract.badge}
+                    </Badge>
+                  </div>
+                </div>
+                {selectedType === contract.id && (
+                  <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                )}
               </div>
-            </div>
-          </div>
-        )}
-        <div className="p-4">
-          <Label className="text-base font-semibold text-gray-900 mb-3 block">
-            Contract Type *
-          </Label>
-          <Select value={selectedType} onValueChange={onContractTypeChange}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select contract type" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* Gen Z / Casual Life Contracts */}
-              <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50">
-                🌟 Popular with Students & Roommates
-              </div>
-              <SelectItem value="roommate">🏠 Roommate Agreement</SelectItem>
-              <SelectItem value="friendLoan">💰 Friend Loan Contract</SelectItem>
-              <SelectItem value="groupTrip">✈️ Group Trip Agreement</SelectItem>
-              <SelectItem value="sharedSubscriptions">📺 Shared Subscriptions</SelectItem>
-              <SelectItem value="eventHosting">🎉 Event Hosting Rules</SelectItem>
-              <SelectItem value="casualBorrowing">📱 Casual Borrowing</SelectItem>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-sm">
+                {contract.description}
+              </CardDescription>
               
-              {/* Professional Contracts */}
-              <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50 mt-2">
-                💼 Professional & Business
-              </div>
-              <SelectItem value="rental">🏠 Rental Agreement</SelectItem>
-              <SelectItem value="jobOffer">💼 Job Offer Letter</SelectItem>
-              <SelectItem value="business">🤝 Business Agreement</SelectItem>
-              <SelectItem value="carRental">🚗 Car Rental Contract</SelectItem>
-              <SelectItem value="storage">📦 Storage Container Lease</SelectItem>
-              <SelectItem value="nda">🛡️ Non-Disclosure Agreement (NDA)</SelectItem>
-              <SelectItem value="freelance">👤 Freelance/Service Agreement</SelectItem>
-              <SelectItem value="employment">💼 Employment Contract</SelectItem>
-              <SelectItem value="partnership">👥 Partnership Agreement</SelectItem>
-              <SelectItem value="consulting">🏆 Consulting Agreement</SelectItem>
-              <SelectItem value="license">📄 License Agreement</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </CardContent>
-    </Card>
+              {/* Professional Contract Button for Rental */}
+              {contract.id === 'rental' && selectedType === 'rental' && (
+                <div className="mt-4 pt-3 border-t border-gray-200">
+                  <Button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowProfessionalRental(true);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                    size="sm"
+                  >
+                    Create Professional Contract
+                  </Button>
+                  <p className="text-xs text-gray-500 mt-1 text-center">
+                    Full-featured lease agreement builder
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Professional Rental Form Dialog */}
+      <ProfessionalRentalForm
+        isOpen={showProfessionalRental}
+        onClose={() => setShowProfessionalRental(false)}
+        onContractGenerate={handleProfessionalContractGenerate}
+      />
+    </div>
   );
 };
