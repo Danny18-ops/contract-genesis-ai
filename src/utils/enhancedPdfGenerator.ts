@@ -187,6 +187,52 @@ export class EnhancedPdfGenerator {
     return currentY + 10;
   }
 
+  private addDisclaimer(contractType: string, y: number): number {
+    const colors = this.colorSchemes[contractType] || this.colorSchemes.default;
+    const margin = 20;
+    const maxWidth = 170;
+    
+    // Check if we need a new page for disclaimer
+    if (y > 220) {
+      this.pdf.addPage();
+      y = 30;
+    }
+    
+    // Disclaimer background with light border
+    this.pdf.setFillColor(248, 250, 252); // Very light gray
+    this.pdf.rect(margin - 5, y - 5, maxWidth + 10, 50, 'F');
+    
+    // Disclaimer border
+    this.pdf.setDrawColor(203, 213, 225); // Light gray border
+    this.pdf.setLineWidth(0.5);
+    this.pdf.rect(margin - 5, y - 5, maxWidth + 10, 50, 'S');
+    
+    // Disclaimer title
+    this.setColor(colors.accent);
+    this.pdf.setFontSize(12);
+    this.pdf.setFont('helvetica', 'bold');
+    this.pdf.text('GENCONTRACT DISCLAIMER', margin, y + 5);
+    
+    y += 15;
+    
+    // Disclaimer content
+    this.pdf.setTextColor(71, 85, 105); // Slate-600
+    this.pdf.setFontSize(9);
+    this.pdf.setFont('helvetica', 'normal');
+    
+    const disclaimerText = 'This contract was generated using GenContract for convenience and standardization purposes. It does not constitute legal advice or create a legally binding agreement on its own. Users are advised to consult a qualified attorney or legal advisor before signing or relying on this document. GenContract is not responsible for any outcomes resulting from the use of this agreement.';
+    
+    const lines = this.pdf.splitTextToSize(disclaimerText, maxWidth - 10);
+    let currentY = y;
+    
+    lines.forEach((line: string) => {
+      this.pdf.text(line, margin, currentY);
+      currentY += 5;
+    });
+    
+    return currentY + 15;
+  }
+
   private addSignatureSection(contractType: string, signatures: any[] = [], y: number): number {
     const colors = this.colorSchemes[contractType] || this.colorSchemes.default;
     const margin = 20;
@@ -360,6 +406,9 @@ export class EnhancedPdfGenerator {
       currentY = 30;
     }
     currentY = this.addSignatureSection(contractType, signatures, currentY + 10);
+    
+    // Add disclaimer section before footer
+    currentY = this.addDisclaimer(contractType, currentY + 10);
     
     // Add footer
     this.addFooter(contractType);
