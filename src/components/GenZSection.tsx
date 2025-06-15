@@ -207,9 +207,6 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
                 <FileText className="w-8 h-8 text-white drop-shadow-lg" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
-              Need Something Custom?
-            </h3>
             <p className="text-white/90 mb-6 drop-shadow-md">
               Create your own contract with our flexible builder for any type of agreement
             </p>
