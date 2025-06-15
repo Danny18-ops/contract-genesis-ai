@@ -1,11 +1,13 @@
+
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
 import { AuthHeader } from '@/components/AuthHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { useContracts } from '@/hooks/use-contracts';
-import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
+import { FileText, Sparkles, Download, Shield, Zap, Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
 import { generateDetailedContract } from '@/utils/detailedContractGenerator';
+import { GenZSection } from '@/components/GenZSection';
 
 const Index = () => {
   const { user } = useAuth();
@@ -47,7 +49,6 @@ const Index = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          // Changed to an abstract contract background (no man)
           backgroundImage: `url('https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1920&h=1080&fit=crop&crop=center')`
         }}
       />
@@ -74,9 +75,12 @@ const Index = () => {
             <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
               GenContract
             </h1>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
+              Make It Official — Even If It's Just Between Friends 📝
+            </h2>
             <p className="text-xl text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed drop-shadow-lg backdrop-blur-sm bg-white/5 rounded-2xl p-6 border border-white/10">
-              Generate comprehensive, legally sound contracts in minutes using advanced AI. From NDAs to freelance agreements, 
-              create professional contracts tailored to your specific needs with automated form filling and premium templates.
+              From roommates to road trips, GenContract covers it all. Create smart, simple contracts for everyday life — 
+              because some agreements are too important to forget, even the casual ones.
             </p>
             
             {/* Enhanced Feature highlights */}
@@ -87,7 +91,7 @@ const Index = () => {
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
                 <Shield className="w-6 h-6 text-green-300 drop-shadow-lg" />
-                <span className="text-sm font-bold text-white drop-shadow-md">Legally Compliant</span>
+                <span className="text-sm font-bold text-white drop-shadow-md">Legally Sound</span>
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
                 <Download className="w-6 h-6 text-purple-300 drop-shadow-lg" />
@@ -95,13 +99,16 @@ const Index = () => {
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
                 <Zap className="w-6 h-6 text-orange-300 drop-shadow-lg" />
-                <span className="text-sm font-bold text-white drop-shadow-md">Auto-Fill Templates</span>
+                <span className="text-sm font-bold text-white drop-shadow-md">Quick Templates</span>
               </div>
             </div>
           </div>
 
+          {/* Gen Z Section */}
+          <GenZSection onQuickContract={handleContractGenerate} />
+
           {/* Main Content */}
-          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mt-16">
             {/* Contract Form */}
             <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
               <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 relative overflow-hidden">
@@ -125,7 +132,7 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-gray-800/20" />
                 <div className="relative z-10">
                   <h2 className="text-3xl font-bold text-white drop-shadow-lg">Contract Preview</h2>
-                  <p className="text-gray-200 mt-3 text-lg drop-shadow-md">Your generated contract will appear here in Arial font</p>
+                  <p className="text-gray-200 mt-3 text-lg drop-shadow-md">Your generated contract will appear here</p>
                 </div>
               </div>
               <div className="p-8 max-h-[800px] overflow-y-auto">

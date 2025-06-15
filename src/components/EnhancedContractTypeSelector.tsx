@@ -38,6 +38,21 @@ export const EnhancedContractTypeSelector = ({ onContractTypeChange, selectedTyp
               <SelectValue placeholder="Select contract type" />
             </SelectTrigger>
             <SelectContent>
+              {/* Gen Z / Casual Life Contracts */}
+              <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50">
+                🌟 Popular with Students & Roommates
+              </div>
+              <SelectItem value="roommate">🏠 Roommate Agreement</SelectItem>
+              <SelectItem value="friendLoan">💰 Friend Loan Contract</SelectItem>
+              <SelectItem value="groupTrip">✈️ Group Trip Agreement</SelectItem>
+              <SelectItem value="sharedSubscriptions">📺 Shared Subscriptions</SelectItem>
+              <SelectItem value="eventHosting">🎉 Event Hosting Rules</SelectItem>
+              <SelectItem value="casualBorrowing">📱 Casual Borrowing</SelectItem>
+              
+              {/* Professional Contracts */}
+              <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50 mt-2">
+                💼 Professional & Business
+              </div>
               <SelectItem value="rental">🏠 Rental Agreement</SelectItem>
               <SelectItem value="jobOffer">💼 Job Offer Letter</SelectItem>
               <SelectItem value="business">🤝 Business Agreement</SelectItem>

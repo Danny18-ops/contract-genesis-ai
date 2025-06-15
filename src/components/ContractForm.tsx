@@ -610,9 +610,9 @@ export const ContractForm = ({ onContractGenerate, isGenerating }: ContractFormP
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Submit Button - only change the button text */}
         <Button disabled={isGenerating} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 rounded">
-          {isGenerating ? 'Generating Contract...' : 'Generate Professional Contract'}
+          {isGenerating ? 'Generating Contract...' : 'Let\'s Make It Official 📝'}
         </Button>
       </form>
 
