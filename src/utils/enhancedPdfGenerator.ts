@@ -48,6 +48,18 @@ export class EnhancedPdfGenerator {
       accent: '#DC2626',
       text: '#1F2937'
     },
+    casualBorrowing: {
+      primary: '#06B6D4', // Cyan
+      secondary: '#CFFAFE',
+      accent: '#0891B2',
+      text: '#1F2937'
+    },
+    advanced: {
+      primary: '#4F46E5', // Indigo
+      secondary: '#E0E7FF',
+      accent: '#3730A3',
+      text: '#1F2937'
+    },
     default: {
       primary: '#6366F1', // Indigo
       secondary: '#E0E7FF',
@@ -85,6 +97,8 @@ export class EnhancedPdfGenerator {
       groupTrip: '✈️',
       eventHosting: '🎉',
       sharedSubscription: '📱',
+      casualBorrowing: '🤝',
+      advanced: '📄',
       default: '📄'
     };
     
@@ -252,7 +266,9 @@ export class EnhancedPdfGenerator {
       friendLoan: 'FRIEND LOAN AGREEMENT',
       groupTrip: 'GROUP TRIP AGREEMENT',
       eventHosting: 'EVENT HOSTING AGREEMENT',
-      sharedSubscription: 'SHARED SUBSCRIPTION AGREEMENT'
+      sharedSubscription: 'SHARED SUBSCRIPTION AGREEMENT',
+      casualBorrowing: 'CASUAL BORROWING AGREEMENT',
+      advanced: 'PROFESSIONAL CONTRACT'
     };
     
     const title = titles[contractType] || 'CONTRACT AGREEMENT';
@@ -296,6 +312,10 @@ export class EnhancedPdfGenerator {
         if (contractData?.user1Name) parties.push(contractData.user1Name);
         if (contractData?.user2Name) parties.push(contractData.user2Name);
         break;
+      case 'friendLoan':
+        if (contractData?.lenderName) parties.push(contractData.lenderName);
+        if (contractData?.borrowerName) parties.push(contractData.borrowerName);
+        break;
       case 'groupTrip':
         if (contractData?.organizerName) parties.push(contractData.organizerName);
         if (contractData?.members) {
@@ -304,9 +324,32 @@ export class EnhancedPdfGenerator {
           });
         }
         break;
-      case 'friendLoan':
-        if (contractData?.lenderName) parties.push(contractData.lenderName);
+      case 'eventHosting':
+        if (contractData?.hostName) parties.push(contractData.hostName);
+        if (contractData?.attendees) {
+          contractData.attendees.forEach((attendee: any) => {
+            if (attendee.name) parties.push(attendee.name);
+          });
+        }
+        break;
+      case 'sharedSubscription':
+        if (contractData?.organizerName) parties.push(contractData.organizerName);
+        if (contractData?.members) {
+          contractData.members.forEach((member: any) => {
+            if (member.name) parties.push(member.name);
+          });
+        }
+        break;
+      case 'casualBorrowing':
+        if (contractData?.ownerName) parties.push(contractData.ownerName);
         if (contractData?.borrowerName) parties.push(contractData.borrowerName);
+        break;
+      case 'advanced':
+        if (contractData?.dynamicFields?.parties) {
+          contractData.dynamicFields.parties.forEach((party: any) => {
+            if (party.name) parties.push(party.name);
+          });
+        }
         break;
       default:
         if (contractData?.organizationData?.name) parties.push(contractData.organizationData.name);
