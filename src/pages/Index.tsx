@@ -14,6 +14,7 @@ import { ProfessionalCarRentalForm } from '@/components/ProfessionalCarRentalFor
 import { ProfessionalBusinessForm } from '@/components/ProfessionalBusinessForm';
 import { ProfessionalStorageForm } from '@/components/ProfessionalStorageForm';
 import { ProfessionalConsultingForm } from '@/components/ProfessionalConsultingForm';
+import { AdvancedContractBuilder } from '@/components/AdvancedContractBuilder';
 
 const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
@@ -27,6 +28,7 @@ const Index = () => {
   const [showProfessionalBusinessForm, setShowProfessionalBusinessForm] = useState(false);
   const [showProfessionalStorageForm, setShowProfessionalStorageForm] = useState(false);
   const [showProfessionalConsultingForm, setShowProfessionalConsultingForm] = useState(false);
+  const [showAdvancedBuilder, setShowAdvancedBuilder] = useState(false);
 
   const handleContractGenerate = (data: any) => {
     console.log('handleContractGenerate called with:', data);
@@ -276,6 +278,22 @@ const Index = () => {
     setShowProfessionalConsultingForm(false);
   };
 
+  const handleAdvancedBuilderOpen = () => {
+    console.log('Opening advanced contract builder');
+    setShowAdvancedBuilder(true);
+  };
+
+  const handleAdvancedBuilderClose = () => {
+    console.log('Closing advanced contract builder');
+    setShowAdvancedBuilder(false);
+  };
+
+  const handleAdvancedContractGenerate = (contractData: any) => {
+    console.log('Advanced contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowAdvancedBuilder(false);
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -424,6 +442,7 @@ const Index = () => {
               {/* Custom Professional Contract Button */}
               <div className="text-center mt-12">
                 <Button 
+                  onClick={handleAdvancedBuilderOpen}
                   className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Create Custom Professional Contract ✨
@@ -478,6 +497,13 @@ const Index = () => {
         isOpen={showProfessionalConsultingForm}
         onClose={handleProfessionalConsultingFormClose}
         onContractGenerate={handleProfessionalConsultingContractGenerate}
+      />
+
+      {/* Advanced Contract Builder */}
+      <AdvancedContractBuilder
+        isOpen={showAdvancedBuilder}
+        onClose={handleAdvancedBuilderClose}
+        onContractGenerate={handleAdvancedContractGenerate}
       />
     </div>
   );
