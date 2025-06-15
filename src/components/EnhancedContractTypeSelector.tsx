@@ -81,7 +81,7 @@ export const EnhancedContractTypeSelector = ({
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
-                  <ContractTypeIcon type={contract.id} className="w-8 h-8" />
+                  <ContractTypeIcon contractType={contract.id} className="w-8 h-8" />
                   <div>
                     <CardTitle className="text-base">{contract.title}</CardTitle>
                     <Badge variant={contract.badgeColor} className="mt-1">
