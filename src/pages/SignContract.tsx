@@ -34,14 +34,19 @@ const SignContract = () => {
 
   const fetchSigningData = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('contract-signing', {
+      const response = await fetch(`https://eypbbsbprbeteolxghoe.supabase.co/functions/v1/contract-signing?token=${token}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5cGJic2JwcmJldGVvbHhnaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5MzY4ODYsImV4cCI6MjA2NTUxMjg4Nn0.CT0sHUTSDX6hmQtN089PRARnkx-ktFWoNT1QDpDeYqU'}`,
+          'Content-Type': 'application/json'
+        }
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch signing data');
+      }
 
       if (data.error) {
         setError(data.error);
@@ -63,14 +68,27 @@ const SignContract = () => {
     try {
       const signatureData = signatures[signingData.signature.signer_name];
       
-      const { data, error } = await supabase.functions.invoke('contract-signing', {
-        body: {
+      if (!signatureData) {
+        throw new Error('No signature provided');
+      }
+
+      const response = await fetch('https://eypbbsbprbeteolxghoe.supabase.co/functions/v1/contract-signing', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5cGJic2JwcmJldGVvbHhnaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5MzY4ODYsImV4cCI6MjA2NTUxMjg4Nn0.CT0sHUTSDX6hmQtN089PRARnkx-ktFWoNT1QDpDeYqU'}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           signingToken: token,
           signatureData
-        }
+        })
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit signature');
+      }
 
       if (data.error) {
         throw new Error(data.error);
@@ -258,11 +276,11 @@ const SignContract = () => {
           </Card>
         )}
 
-        {/* Digital Signature Modal */}
+        {/* Digital Signature Modal - Only for current signer */}
         <DigitalSignature
           isOpen={showSignature}
           onClose={() => setShowSignature(false)}
-          parties={[signature.signer_name]}
+          parties={[signature.signer_name]} // Only current signer
           onSignatureChange={handleSignature}
         />
       </div>

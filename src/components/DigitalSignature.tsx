@@ -24,6 +24,18 @@ export const DigitalSignature = ({ onSignatureChange, parties, isOpen, onClose }
   useEffect(() => {
     if (isOpen && parties.length > 0) {
       setActiveParty(parties[0]);
+      // Clear signatures when reopening
+      setSignatures({});
+      // Clear all canvases
+      parties.forEach(party => {
+        const canvas = canvasRefs.current[party];
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+      });
     }
   }, [isOpen, parties]);
 
@@ -53,7 +65,7 @@ export const DigitalSignature = ({ onSignatureChange, parties, isOpen, onClose }
     if (!canvas) return;
     
     setupCanvas(canvas);
-    setIsDrawing({ ...isDrawing, [party]: true });
+    setIsDrawing(prev => ({ ...prev, [party]: true }));
     
     const pos = getMousePos(canvas, e);
     const ctx = canvas.getContext('2d');
@@ -78,7 +90,7 @@ export const DigitalSignature = ({ onSignatureChange, parties, isOpen, onClose }
   };
 
   const stopDrawing = (party: string) => {
-    setIsDrawing({ ...isDrawing, [party]: false });
+    setIsDrawing(prev => ({ ...prev, [party]: false }));
     const canvas = canvasRefs.current[party];
     if (canvas) {
       const signatureData = canvas.toDataURL();
@@ -190,7 +202,11 @@ export const DigitalSignature = ({ onSignatureChange, parties, isOpen, onClose }
               {/* Drawing Canvas */}
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
                 <canvas
-                  ref={(el) => { canvasRefs.current[activeParty] = el; }}
+                  ref={(el) => { 
+                    if (el) {
+                      canvasRefs.current[activeParty] = el;
+                    }
+                  }}
                   width={600}
                   height={200}
                   className="w-full h-32 border-2 border-gray-300 rounded bg-white cursor-crosshair"
