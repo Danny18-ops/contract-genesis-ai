@@ -5,7 +5,7 @@ import { ContractPreview } from '@/components/ContractPreview';
 import { AuthHeader } from '@/components/AuthHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { useContracts } from '@/hooks/use-contracts';
-import { FileText, Sparkles, Download, Shield, Zap, Users, DollarSign, MapPin, Tv, PartyPopper, Coffee } from 'lucide-react';
+import { FileText, Sparkles, Download, Shield, Zap } from 'lucide-react';
 import { generateDetailedContract } from '@/utils/detailedContractGenerator';
 import { GenZSection } from '@/components/GenZSection';
 
@@ -18,13 +18,16 @@ const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
 
   const handleContractGenerate = (data: any) => {
+    console.log('handleContractGenerate called with:', data);
     setContractData(data);
     setIsGenerating(true);
     setSelectedTemplate(data.template || 'modern');
 
     // Generate comprehensive contract using the detailed generator
     setTimeout(() => {
+      console.log('Generating contract with data:', data);
       const detailedContract = generateDetailedContract(data);
+      console.log('Generated contract:', detailedContract);
       setGeneratedContract(detailedContract);
       setIsGenerating(false);
     }, 2000);
