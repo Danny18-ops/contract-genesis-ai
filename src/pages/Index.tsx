@@ -420,6 +420,15 @@ const Index = () => {
                   </Card>
                 ))}
               </div>
+
+              {/* Custom Professional Contract Button */}
+              <div className="text-center mt-12">
+                <Button 
+                  className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Create Custom Professional Contract ✨
+                </Button>
+              </div>
             </div>
           ) : (
             <GenZSection onQuickContract={handleContractGenerate} />
