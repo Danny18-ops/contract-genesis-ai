@@ -201,22 +201,12 @@ export const GenZSection = ({ onQuickContract }: GenZSectionProps) => {
 
         {/* Create Your Own Contract Button */}
         <div className="text-center mb-12">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center mb-4">
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4 rounded-full shadow-2xl backdrop-blur-sm border border-white/20">
-                <FileText className="w-8 h-8 text-white drop-shadow-lg" />
-              </div>
-            </div>
-            <p className="text-white/90 mb-6 drop-shadow-md">
-              Create your own contract with our flexible builder for any type of agreement
-            </p>
-            <Button 
-              onClick={handleCreateYourOwn}
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold px-8 py-3 text-lg"
-            >
-              Create Your Own Contract 🚀
-            </Button>
-          </div>
+          <Button 
+            onClick={handleCreateYourOwn}
+            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold px-8 py-3 text-lg"
+          >
+            Create Your Own Contract 🚀
+          </Button>
         </div>
 
         {/* Bottom CTA */}
