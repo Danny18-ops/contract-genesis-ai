@@ -1,119 +1,155 @@
-
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Loader2, FileText, Trash2, Eye, ArrowLeft } from 'lucide-react';
 import { useContracts } from '@/hooks/use-contracts';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Navigate, Link } from 'react-router-dom';
-import { FileText, Trash2, Eye, Plus, Download } from 'lucide-react';
-import { format } from 'date-fns';
+import { ContractPreview } from '@/components/ContractPreview';
 
 const Contracts = () => {
-  const { user } = useAuth();
   const { contracts, loading, deleteContract } = useContracts();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [selectedContract, setSelectedContract] = useState<any>(null);
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  const handleDownload = (contract: any) => {
-    const blob = new Blob([contract.content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${contract.title}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+    }
+  }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900">
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-2">My Contracts</h1>
-            <p className="text-blue-100">Manage your saved contracts</p>
-          </div>
-          <div className="flex gap-4">
-            <Link to="/">
-              <Button className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
-                <Plus className="w-4 h-4 mr-2" />
-                Create New
-              </Button>
-            </Link>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-md py-4">
+        <div className="container mx-auto px-6">
+          <h1 className="text-2xl font-semibold text-gray-900">My Contracts</h1>
         </div>
-
+      </header>
+      
+      <div className="container mx-auto px-6 py-8">
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="bg-white/95 backdrop-blur-lg">
-                <CardHeader>
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-20 w-full" />
-                </CardContent>
-              </Card>
-            ))}
+          <div className="text-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <p className="text-gray-600">Loading your contracts...</p>
           </div>
         ) : contracts.length === 0 ? (
-          <Card className="bg-white/95 backdrop-blur-lg text-center py-12">
-            <CardContent>
-              <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">No contracts yet</h3>
-              <p className="text-gray-600 mb-6">Create your first contract to get started</p>
-              <Link to="/">
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Contract
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          <div className="text-center py-12">
+            <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Contracts Yet</h3>
+            <p className="text-gray-600 mb-6">Create your first contract to get started</p>
+            <Button onClick={() => navigate('/')} className="bg-blue-600 hover:bg-blue-700">
+              Create Contract
+            </Button>
+          </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {contracts.map((contract) => (
-              <Card key={contract.id} className="bg-white/95 backdrop-blur-lg hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg mb-2">{contract.title}</CardTitle>
-                      <Badge variant="secondary" className="mb-2">
-                        {contract.contract_type}
-                      </Badge>
-                    </div>
-                  </div>
-                  <CardDescription>
-                    Created {format(new Date(contract.created_at), 'MMM d, yyyy')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2">
+          <div className="space-y-6">
+            {selectedContract ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Button 
+                    onClick={() => setSelectedContract(null)}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Contracts
+                  </Button>
+                  <div className="flex items-center gap-2">
+                    {selectedContract.signing_status && (
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        selectedContract.signing_status === 'fully_signed' 
+                          ? 'bg-green-100 text-green-800'
+                          : selectedContract.signing_status === 'pending_signatures'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {selectedContract.signing_status === 'fully_signed' && 'Fully Signed'}
+                        {selectedContract.signing_status === 'pending_signatures' && 'Pending Signatures'}
+                        {selectedContract.signing_status === 'draft' && 'Draft'}
+                      </span>
+                    )}
                     <Button
+                      onClick={() => deleteContract(selectedContract.id)}
                       variant="outline"
                       size="sm"
-                      onClick={() => handleDownload(contract)}
-                      className="flex-1"
-                    >
-                      <Download className="w-4 h-4 mr-1" />
-                      Download
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteContract(contract.id)}
+                      className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+                
+                <ContractPreview
+                  contract={selectedContract.content}
+                  isGenerating={false}
+                  contractData={selectedContract.contract_data}
+                  contractId={selectedContract.id}
+                  showSigningOption={selectedContract.signing_status !== 'fully_signed'}
+                />
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {contracts.map((contract) => (
+                  <Card key={contract.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                            {contract.title}
+                          </h3>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-sm text-gray-500 capitalize">
+                              {contract.contract_type.replace(/([A-Z])/g, ' $1').trim()}
+                            </span>
+                            {contract.signing_status && (
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                contract.signing_status === 'fully_signed' 
+                                  ? 'bg-green-100 text-green-800'
+                                  : contract.signing_status === 'pending_signatures'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {contract.signing_status === 'fully_signed' && 'Signed'}
+                                {contract.signing_status === 'pending_signatures' && 'Pending'}
+                                {contract.signing_status === 'draft' && 'Draft'}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            Created {format(new Date(contract.created_at), 'MMM d, yyyy')}
+                          </p>
+                        </div>
+                        
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteContract(contract.id);
+                          }}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Button
+                          onClick={() => setSelectedContract(contract)}
+                          className="w-full"
+                          variant="outline"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          View Contract
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

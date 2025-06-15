@@ -16,6 +16,7 @@ export type Database = {
           contract_type: string
           created_at: string
           id: string
+          signing_status: string | null
           title: string
           updated_at: string
           user_id: string
@@ -26,6 +27,7 @@ export type Database = {
           contract_type: string
           created_at?: string
           id?: string
+          signing_status?: string | null
           title: string
           updated_at?: string
           user_id: string
@@ -36,11 +38,59 @@ export type Database = {
           contract_type?: string
           created_at?: string
           id?: string
+          signing_status?: string | null
           title?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      digital_signatures: {
+        Row: {
+          contract_id: string
+          created_at: string
+          id: string
+          signature_status: string
+          signed_at: string | null
+          signer_email: string
+          signer_name: string
+          signing_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          id?: string
+          signature_status?: string
+          signed_at?: string | null
+          signer_email: string
+          signer_name: string
+          signing_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          id?: string
+          signature_status?: string
+          signed_at?: string | null
+          signer_email?: string
+          signer_name?: string
+          signing_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_signatures_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -74,7 +124,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_signing_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      update_contract_signing_status: {
+        Args: { contract_uuid: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

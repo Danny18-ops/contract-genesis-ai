@@ -10,6 +10,7 @@ export interface Contract {
   contract_type: string;
   content: string;
   contract_data: any;
+  signing_status?: string;
   created_at: string;
   updated_at: string;
 }
@@ -59,7 +60,8 @@ export const useContracts = () => {
           title,
           contract_type: contractType,
           content,
-          contract_data: contractData
+          contract_data: contractData,
+          signing_status: 'draft'
         })
         .select()
         .single();

@@ -1,22 +1,31 @@
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, Download, FileText } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Loader2, Download, FileText, PenTool } from 'lucide-react';
 import { generateEnhancedPdf } from '@/utils/enhancedPdfGenerator';
+import { ContractSigningFlow } from './ContractSigningFlow';
 
 interface ContractPreviewProps {
   contract: string;
   isGenerating: boolean;
   contractData?: any;
   template?: string;
+  contractId?: string;
+  showSigningOption?: boolean;
 }
 
 export const ContractPreview = ({ 
   contract, 
   isGenerating, 
   contractData,
-  template = 'modern'
+  template = 'modern',
+  contractId,
+  showSigningOption = false
 }: ContractPreviewProps) => {
+  const [showSigningFlow, setShowSigningFlow] = useState(false);
+
   const handleDownloadPDF = () => {
     if (!contract) return;
 
@@ -79,10 +88,21 @@ export const ContractPreview = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Contract Preview</h3>
-        <Button onClick={handleDownloadPDF} className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
-          <Download className="w-4 h-4" />
-          Download Enhanced PDF
-        </Button>
+        <div className="flex gap-3">
+          {showSigningOption && contractId && (
+            <Button 
+              onClick={() => setShowSigningFlow(true)}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+            >
+              <PenTool className="w-4 h-4" />
+              Get Signatures
+            </Button>
+          )}
+          <Button onClick={handleDownloadPDF} className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
+            <Download className="w-4 h-4" />
+            Download Enhanced PDF
+          </Button>
+        </div>
       </div>
       
       <Card>
@@ -92,6 +112,20 @@ export const ContractPreview = ({
           </div>
         </CardContent>
       </Card>
+
+      {/* Signing Flow Dialog */}
+      <Dialog open={showSigningFlow} onOpenChange={setShowSigningFlow}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Digital Contract Signing</DialogTitle>
+          </DialogHeader>
+          <ContractSigningFlow
+            contractId={contractId!}
+            contractTitle={contractData?.contractTitle || 'Contract'}
+            onClose={() => setShowSigningFlow(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
