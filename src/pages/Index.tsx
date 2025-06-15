@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
@@ -8,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { ProfessionalRentalForm } from '@/components/ProfessionalRentalForm';
 
 const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
@@ -15,6 +17,7 @@ const Index = () => {
   const [contractData, setContractData] = useState<any>(null);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showProfessionalTemplates, setShowProfessionalTemplates] = useState(false);
+  const [showProfessionalRentalForm, setShowProfessionalRentalForm] = useState(false);
 
   const handleContractGenerate = (data: any) => {
     console.log('handleContractGenerate called with:', data);
@@ -180,6 +183,22 @@ const Index = () => {
     handleContractGenerate(professionalData);
   };
 
+  const handleProfessionalRentalFormOpen = () => {
+    console.log('Opening professional rental form');
+    setShowProfessionalRentalForm(true);
+  };
+
+  const handleProfessionalRentalFormClose = () => {
+    console.log('Closing professional rental form');
+    setShowProfessionalRentalForm(false);
+  };
+
+  const handleProfessionalRentalContractGenerate = (contractData: any) => {
+    console.log('Professional rental contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalRentalForm(false);
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -298,7 +317,13 @@ const Index = () => {
                       
                       <div className="p-6">
                         <Button 
-                          onClick={() => handleProfessionalTemplate(template)}
+                          onClick={() => {
+                            if (template.contractType === 'rental') {
+                              handleProfessionalRentalFormOpen();
+                            } else {
+                              handleProfessionalTemplate(template);
+                            }
+                          }}
                           className={`w-full bg-gradient-to-r ${template.gradient} hover:opacity-90 text-white font-semibold`}
                         >
                           Create Professional Contract
@@ -321,6 +346,13 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* Professional Rental Form */}
+      <ProfessionalRentalForm
+        isOpen={showProfessionalRentalForm}
+        onClose={handleProfessionalRentalFormClose}
+        onContractGenerate={handleProfessionalRentalContractGenerate}
+      />
     </div>
   );
 };
