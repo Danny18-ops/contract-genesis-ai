@@ -117,7 +117,7 @@ export const EnhancedContractTypeSelector = ({
               </CardDescription>
               
               {/* Professional Contract Button for Rental */}
-              {contract.id === 'rental' && selectedType === 'rental' && (
+              {contract.id === 'rental' && (
                 <div className="mt-3 sm:mt-4 pt-3 border-t border-gray-200">
                   <Button 
                     onClick={handleProfessionalButtonClick}
