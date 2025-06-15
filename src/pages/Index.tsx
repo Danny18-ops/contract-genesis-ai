@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ContractForm } from '@/components/ContractForm';
 import { ContractPreview } from '@/components/ContractPreview';
@@ -10,6 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { ProfessionalRentalForm } from '@/components/ProfessionalRentalForm';
+import { ProfessionalJobOfferForm } from '@/components/ProfessionalJobOfferForm';
+import { ProfessionalCarRentalForm } from '@/components/ProfessionalCarRentalForm';
+import { ProfessionalBusinessForm } from '@/components/ProfessionalBusinessForm';
+import { ProfessionalStorageForm } from '@/components/ProfessionalStorageForm';
+import { ProfessionalConsultingForm } from '@/components/ProfessionalConsultingForm';
 
 const Index = () => {
   const [generatedContract, setGeneratedContract] = useState<string>('');
@@ -18,6 +22,11 @@ const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showProfessionalTemplates, setShowProfessionalTemplates] = useState(false);
   const [showProfessionalRentalForm, setShowProfessionalRentalForm] = useState(false);
+  const [showProfessionalJobOfferForm, setShowProfessionalJobOfferForm] = useState(false);
+  const [showProfessionalCarRentalForm, setShowProfessionalCarRentalForm] = useState(false);
+  const [showProfessionalBusinessForm, setShowProfessionalBusinessForm] = useState(false);
+  const [showProfessionalStorageForm, setShowProfessionalStorageForm] = useState(false);
+  const [showProfessionalConsultingForm, setShowProfessionalConsultingForm] = useState(false);
 
   const handleContractGenerate = (data: any) => {
     console.log('handleContractGenerate called with:', data);
@@ -111,18 +120,6 @@ const Index = () => {
         party2: 'Client/Partner Name',
         jurisdiction: 'State of California, USA',
         
-        // Rental specific fields
-        ...(template.contractType === 'rental' && {
-          tenant: 'Tenant Name',
-          propertyAddress: '456 Rental Property Ave, City, State 12345',
-          monthlyRent: '2000',
-          securityDeposit: '2000',
-          startDate: new Date().toISOString().split('T')[0],
-          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-          lateFee: '50',
-          state: 'California'
-        }),
-        
         // Job Offer specific fields
         ...(template.contractType === 'jobOffer' && {
           candidate: 'Candidate Name',
@@ -197,6 +194,86 @@ const Index = () => {
     console.log('Professional rental contract data received:', contractData);
     handleContractGenerate(contractData);
     setShowProfessionalRentalForm(false);
+  };
+
+  const handleProfessionalJobOfferFormOpen = () => {
+    console.log('Opening professional job offer form');
+    setShowProfessionalJobOfferForm(true);
+  };
+
+  const handleProfessionalJobOfferFormClose = () => {
+    console.log('Closing professional job offer form');
+    setShowProfessionalJobOfferForm(false);
+  };
+
+  const handleProfessionalJobOfferContractGenerate = (contractData: any) => {
+    console.log('Professional job offer contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalJobOfferForm(false);
+  };
+
+  const handleProfessionalCarRentalFormOpen = () => {
+    console.log('Opening professional car rental form');
+    setShowProfessionalCarRentalForm(true);
+  };
+
+  const handleProfessionalCarRentalFormClose = () => {
+    console.log('Closing professional car rental form');
+    setShowProfessionalCarRentalForm(false);
+  };
+
+  const handleProfessionalCarRentalContractGenerate = (contractData: any) => {
+    console.log('Professional car rental contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalCarRentalForm(false);
+  };
+
+  const handleProfessionalBusinessFormOpen = () => {
+    console.log('Opening professional business form');
+    setShowProfessionalBusinessForm(true);
+  };
+
+  const handleProfessionalBusinessFormClose = () => {
+    console.log('Closing professional business form');
+    setShowProfessionalBusinessForm(false);
+  };
+
+  const handleProfessionalBusinessContractGenerate = (contractData: any) => {
+    console.log('Professional business contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalBusinessForm(false);
+  };
+
+  const handleProfessionalStorageFormOpen = () => {
+    console.log('Opening professional storage form');
+    setShowProfessionalStorageForm(true);
+  };
+
+  const handleProfessionalStorageFormClose = () => {
+    console.log('Closing professional storage form');
+    setShowProfessionalStorageForm(false);
+  };
+
+  const handleProfessionalStorageContractGenerate = (contractData: any) => {
+    console.log('Professional storage contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalStorageForm(false);
+  };
+
+  const handleProfessionalConsultingFormOpen = () => {
+    console.log('Opening professional consulting form');
+    setShowProfessionalConsultingForm(true);
+  };
+
+  const handleProfessionalConsultingFormClose = () => {
+    console.log('Closing professional consulting form');
+    setShowProfessionalConsultingForm(false);
+  };
+
+  const handleProfessionalConsultingContractGenerate = (contractData: any) => {
+    console.log('Professional consulting contract data received:', contractData);
+    handleContractGenerate(contractData);
+    setShowProfessionalConsultingForm(false);
   };
 
   return (
@@ -320,6 +397,16 @@ const Index = () => {
                           onClick={() => {
                             if (template.contractType === 'rental') {
                               handleProfessionalRentalFormOpen();
+                            } else if (template.contractType === 'jobOffer') {
+                              handleProfessionalJobOfferFormOpen();
+                            } else if (template.contractType === 'carRental') {
+                              handleProfessionalCarRentalFormOpen();
+                            } else if (template.contractType === 'business') {
+                              handleProfessionalBusinessFormOpen();
+                            } else if (template.contractType === 'storage') {
+                              handleProfessionalStorageFormOpen();
+                            } else if (template.contractType === 'consulting') {
+                              handleProfessionalConsultingFormOpen();
                             } else {
                               handleProfessionalTemplate(template);
                             }
@@ -347,11 +434,41 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Professional Rental Form */}
+      {/* Professional Forms */}
       <ProfessionalRentalForm
         isOpen={showProfessionalRentalForm}
         onClose={handleProfessionalRentalFormClose}
         onContractGenerate={handleProfessionalRentalContractGenerate}
+      />
+
+      <ProfessionalJobOfferForm
+        isOpen={showProfessionalJobOfferForm}
+        onClose={handleProfessionalJobOfferFormClose}
+        onContractGenerate={handleProfessionalJobOfferContractGenerate}
+      />
+
+      <ProfessionalCarRentalForm
+        isOpen={showProfessionalCarRentalForm}
+        onClose={handleProfessionalCarRentalFormClose}
+        onContractGenerate={handleProfessionalCarRentalContractGenerate}
+      />
+
+      <ProfessionalBusinessForm
+        isOpen={showProfessionalBusinessForm}
+        onClose={handleProfessionalBusinessFormClose}
+        onContractGenerate={handleProfessionalBusinessContractGenerate}
+      />
+
+      <ProfessionalStorageForm
+        isOpen={showProfessionalStorageForm}
+        onClose={handleProfessionalStorageFormClose}
+        onContractGenerate={handleProfessionalStorageContractGenerate}
+      />
+
+      <ProfessionalConsultingForm
+        isOpen={showProfessionalConsultingForm}
+        onClose={handleProfessionalConsultingFormClose}
+        onContractGenerate={handleProfessionalConsultingContractGenerate}
       />
     </div>
   );
