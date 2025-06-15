@@ -55,9 +55,16 @@ export const EnhancedContractTypeSelector = ({
   };
 
   const handleProfessionalContractGenerate = (contractData: any) => {
+    console.log('Professional contract data received:', contractData);
     if (onContractGenerate) {
       onContractGenerate(contractData);
     }
+  };
+
+  const handleProfessionalButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log('Professional contract button clicked');
+    setShowProfessionalRental(true);
   };
 
   return (
@@ -105,10 +112,7 @@ export const EnhancedContractTypeSelector = ({
               {contract.id === 'rental' && selectedType === 'rental' && (
                 <div className="mt-4 pt-3 border-t border-gray-200">
                   <Button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowProfessionalRental(true);
-                    }}
+                    onClick={handleProfessionalButtonClick}
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
                     size="sm"
                   >
@@ -127,7 +131,10 @@ export const EnhancedContractTypeSelector = ({
       {/* Professional Rental Form Dialog */}
       <ProfessionalRentalForm
         isOpen={showProfessionalRental}
-        onClose={() => setShowProfessionalRental(false)}
+        onClose={() => {
+          console.log('Closing professional rental form');
+          setShowProfessionalRental(false);
+        }}
         onContractGenerate={handleProfessionalContractGenerate}
       />
     </div>

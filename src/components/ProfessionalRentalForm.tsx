@@ -20,6 +20,9 @@ interface ProfessionalRentalFormProps {
 
 export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: ProfessionalRentalFormProps) => {
   const { toast } = useToast();
+  
+  console.log('ProfessionalRentalForm rendered with isOpen:', isOpen);
+  
   const [formData, setFormData] = useState({
     // Parties Involved
     landlordName: '',
@@ -80,6 +83,8 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form submitted with data:', formData);
+    
     if (!validateForm()) {
       toast({
         title: "Validation Error",
@@ -102,19 +107,15 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
       }
     };
 
+    console.log('Generating contract with data:', contractData);
     onContractGenerate(contractData);
     onClose();
   };
 
-  const stateOptions = [
-    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
-    'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-    'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-    'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
-    'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
-    'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-    'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-  ];
+  if (!isOpen) {
+    console.log('Dialog not open, returning null');
+    return null;
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -146,6 +147,7 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                       value={formData.landlordName}
                       onChange={(e) => handleInputChange('landlordName', e.target.value)}
                       placeholder="Enter landlord full name"
+                      required
                     />
                   </div>
                   <div>
@@ -167,15 +169,6 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                       placeholder="(555) 123-4567"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="landlordLogo">Landlord Logo URL (Optional)</Label>
-                    <Input
-                      id="landlordLogo"
-                      value={formData.landlordLogo}
-                      onChange={(e) => handleInputChange('landlordLogo', e.target.value)}
-                      placeholder="https://example.com/logo.png"
-                    />
-                  </div>
                 </div>
                 
                 <div className="space-y-3">
@@ -187,6 +180,7 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                       value={formData.tenantName}
                       onChange={(e) => handleInputChange('tenantName', e.target.value)}
                       placeholder="Enter tenant full name"
+                      required
                     />
                   </div>
                   <div>
@@ -230,6 +224,7 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                     value={formData.propertyAddress}
                     onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
                     placeholder="123 Main Street, City, State 12345"
+                    required
                   />
                 </div>
                 <div>
@@ -263,6 +258,7 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                     type="date"
                     value={formData.leaseStartDate}
                     onChange={(e) => handleInputChange('leaseStartDate', e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -272,6 +268,7 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                     type="date"
                     value={formData.leaseEndDate}
                     onChange={(e) => handleInputChange('leaseEndDate', e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -287,161 +284,29 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="monthlyRent">Monthly Rent *</Label>
+                  <Label htmlFor="monthlyRent">Monthly Rent ($) *</Label>
                   <Input
                     id="monthlyRent"
                     type="number"
                     value={formData.monthlyRent}
                     onChange={(e) => handleInputChange('monthlyRent', e.target.value)}
                     placeholder="2000"
+                    required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="securityDeposit">Security Deposit *</Label>
+                  <Label htmlFor="securityDeposit">Security Deposit ($) *</Label>
                   <Input
                     id="securityDeposit"
                     type="number"
                     value={formData.securityDeposit}
                     onChange={(e) => handleInputChange('securityDeposit', e.target.value)}
                     placeholder="2000"
+                    required
                   />
                 </div>
-                <div>
-                  <Label htmlFor="lateFeeAmount">Late Fee Amount (Optional)</Label>
-                  <Input
-                    id="lateFeeAmount"
-                    type="number"
-                    value={formData.lateFeeAmount}
-                    onChange={(e) => handleInputChange('lateFeeAmount', e.target.value)}
-                    placeholder="50"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="parkingCharges">Parking Charges (Optional)</Label>
-                  <Input
-                    id="parkingCharges"
-                    type="number"
-                    value={formData.parkingCharges}
-                    onChange={(e) => handleInputChange('parkingCharges', e.target.value)}
-                    placeholder="100"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="storageCharges">Storage Charges (Optional)</Label>
-                  <Input
-                    id="storageCharges"
-                    type="number"
-                    value={formData.storageCharges}
-                    onChange={(e) => handleInputChange('storageCharges', e.target.value)}
-                    placeholder="25"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Utilities & Charges */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Zap className="w-5 h-5 text-yellow-600" />
-                Utilities & Responsibilities
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { key: 'waterPaidBy', label: 'Water' },
-                  { key: 'electricityPaidBy', label: 'Electricity' },
-                  { key: 'gasPaidBy', label: 'Gas' },
-                  { key: 'internetPaidBy', label: 'Internet' }
-                ].map(({ key, label }) => (
-                  <div key={key}>
-                    <Label>{label} paid by:</Label>
-                    <Select value={formData[key as keyof typeof formData] as string} onValueChange={(value) => handleInputChange(key, value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="tenant">Tenant</SelectItem>
-                        <SelectItem value="landlord">Landlord</SelectItem>
-                        <SelectItem value="shared">Shared</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Terms & Conditions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <FileText className="w-5 h-5 text-red-600" />
-                Terms & Conditions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label>Lease Type</Label>
-                  <Select value={formData.leaseType} onValueChange={(value) => handleInputChange('leaseType', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="fixed">Fixed Term</SelectItem>
-                      <SelectItem value="month-to-month">Month-to-Month</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Move-out Notice Period</Label>
-                  <Select value={formData.moveOutNotice} onValueChange={(value) => handleInputChange('moveOutNotice', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="30">30 days</SelectItem>
-                      <SelectItem value="60">60 days</SelectItem>
-                      <SelectItem value="90">90 days</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Governing Law (State)</Label>
-                  <Select value={formData.governingLaw} onValueChange={(value) => handleInputChange('governingLaw', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {stateOptions.map(state => (
-                        <SelectItem key={state} value={state}>{state}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="petPolicy"
-                    checked={formData.petPolicy}
-                    onCheckedChange={(checked) => handleInputChange('petPolicy', !!checked)}
-                  />
-                  <Label htmlFor="petPolicy">Pets Allowed</Label>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="maintenanceResponsibilities">Maintenance Responsibilities (Optional)</Label>
-                <Textarea
-                  id="maintenanceResponsibilities"
-                  value={formData.maintenanceResponsibilities}
-                  onChange={(e) => handleInputChange('maintenanceResponsibilities', e.target.value)}
-                  placeholder="Specify who is responsible for lawn care, minor repairs, etc."
-                  rows={3}
-                />
               </div>
             </CardContent>
           </Card>
