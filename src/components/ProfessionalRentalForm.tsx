@@ -21,7 +21,7 @@ interface ProfessionalRentalFormProps {
 export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: ProfessionalRentalFormProps) => {
   const { toast } = useToast();
   
-  console.log('ProfessionalRentalForm rendered with isOpen:', isOpen);
+  console.log('ProfessionalRentalForm rendering - isOpen:', isOpen);
   
   const [formData, setFormData] = useState({
     // Parties Involved
@@ -111,11 +111,6 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
     onContractGenerate(contractData);
     onClose();
   };
-
-  if (!isOpen) {
-    console.log('Dialog not open, returning null');
-    return null;
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
