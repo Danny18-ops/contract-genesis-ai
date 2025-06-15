@@ -52,6 +52,13 @@ export const EnhancedContractTypeSelector = ({
 
   const handleCardClick = (contractType: string) => {
     console.log('Card clicked for contract type:', contractType);
+    
+    // If rental is clicked, open the professional form
+    if (contractType === 'rental') {
+      setShowProfessionalRental(true);
+      return;
+    }
+    
     onContractTypeChange(contractType);
   };
 
@@ -108,6 +115,21 @@ export const EnhancedContractTypeSelector = ({
               <CardDescription className="text-xs sm:text-sm">
                 {contract.description}
               </CardDescription>
+              
+              {/* Show professional contract button only for rental */}
+              {contract.id === 'rental' && (
+                <div className="mt-4">
+                  <Button 
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click
+                      setShowProfessionalRental(true);
+                    }}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium"
+                  >
+                    Create Professional Contract
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}
