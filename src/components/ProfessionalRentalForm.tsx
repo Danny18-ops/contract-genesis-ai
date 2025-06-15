@@ -114,209 +114,223 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <FileText className="w-6 h-6 text-blue-600" />
+      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <DialogHeader className="px-4 sm:px-6 py-4 border-b flex-shrink-0">
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             Professional Rental Agreement Builder
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Parties Involved */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Users className="w-5 h-5 text-blue-600" />
-                Parties Involved
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-700">Landlord Information</h4>
-                  <div>
-                    <Label htmlFor="landlordName">Landlord Name *</Label>
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 py-4">
+            {/* Parties Involved */}
+            <Card>
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                  Parties Involved
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-gray-700 text-sm sm:text-base">Landlord Information</h4>
+                    <div>
+                      <Label htmlFor="landlordName" className="text-sm">Landlord Name *</Label>
+                      <Input
+                        id="landlordName"
+                        value={formData.landlordName}
+                        onChange={(e) => handleInputChange('landlordName', e.target.value)}
+                        placeholder="Enter landlord full name"
+                        required
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="landlordEmail" className="text-sm">Email</Label>
+                      <Input
+                        id="landlordEmail"
+                        type="email"
+                        value={formData.landlordEmail}
+                        onChange={(e) => handleInputChange('landlordEmail', e.target.value)}
+                        placeholder="landlord@example.com"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="landlordPhone" className="text-sm">Phone</Label>
+                      <Input
+                        id="landlordPhone"
+                        value={formData.landlordPhone}
+                        onChange={(e) => handleInputChange('landlordPhone', e.target.value)}
+                        placeholder="(555) 123-4567"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-gray-700 text-sm sm:text-base">Tenant Information</h4>
+                    <div>
+                      <Label htmlFor="tenantName" className="text-sm">Tenant Name *</Label>
+                      <Input
+                        id="tenantName"
+                        value={formData.tenantName}
+                        onChange={(e) => handleInputChange('tenantName', e.target.value)}
+                        placeholder="Enter tenant full name"
+                        required
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="tenantEmail" className="text-sm">Email</Label>
+                      <Input
+                        id="tenantEmail"
+                        type="email"
+                        value={formData.tenantEmail}
+                        onChange={(e) => handleInputChange('tenantEmail', e.target.value)}
+                        placeholder="tenant@example.com"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="tenantPhone" className="text-sm">Phone</Label>
+                      <Input
+                        id="tenantPhone"
+                        value={formData.tenantPhone}
+                        onChange={(e) => handleInputChange('tenantPhone', e.target.value)}
+                        placeholder="(555) 123-4567"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Property Details */}
+            <Card>
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                  Property Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2">
+                    <Label htmlFor="propertyAddress" className="text-sm">Property Address *</Label>
                     <Input
-                      id="landlordName"
-                      value={formData.landlordName}
-                      onChange={(e) => handleInputChange('landlordName', e.target.value)}
-                      placeholder="Enter landlord full name"
+                      id="propertyAddress"
+                      value={formData.propertyAddress}
+                      onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
+                      placeholder="123 Main Street, City, State 12345"
                       required
+                      className="text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="landlordEmail">Email</Label>
+                    <Label htmlFor="unitNumber" className="text-sm">Unit Number (Optional)</Label>
                     <Input
-                      id="landlordEmail"
-                      type="email"
-                      value={formData.landlordEmail}
-                      onChange={(e) => handleInputChange('landlordEmail', e.target.value)}
-                      placeholder="landlord@example.com"
+                      id="unitNumber"
+                      value={formData.unitNumber}
+                      onChange={(e) => handleInputChange('unitNumber', e.target.value)}
+                      placeholder="Apt 2B, Unit 5, etc."
+                      className="text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="landlordPhone">Phone</Label>
-                    <Input
-                      id="landlordPhone"
-                      value={formData.landlordPhone}
-                      onChange={(e) => handleInputChange('landlordPhone', e.target.value)}
-                      placeholder="(555) 123-4567"
-                    />
+                    <Label htmlFor="rentDueDate" className="text-sm">Rent Due Date</Label>
+                    <Select value={formData.rentDueDate} onValueChange={(value) => handleInputChange('rentDueDate', value)}>
+                      <SelectTrigger className="text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-48 overflow-y-auto">
+                        {Array.from({ length: 31 }, (_, i) => (
+                          <SelectItem key={i + 1} value={String(i + 1)} className="text-sm">
+                            {i + 1}{i === 0 ? 'st' : i === 1 ? 'nd' : i === 2 ? 'rd' : 'th'} of each month
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-700">Tenant Information</h4>
                   <div>
-                    <Label htmlFor="tenantName">Tenant Name *</Label>
+                    <Label htmlFor="leaseStartDate" className="text-sm">Lease Start Date *</Label>
                     <Input
-                      id="tenantName"
-                      value={formData.tenantName}
-                      onChange={(e) => handleInputChange('tenantName', e.target.value)}
-                      placeholder="Enter tenant full name"
+                      id="leaseStartDate"
+                      type="date"
+                      value={formData.leaseStartDate}
+                      onChange={(e) => handleInputChange('leaseStartDate', e.target.value)}
                       required
+                      className="text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="tenantEmail">Email</Label>
+                    <Label htmlFor="leaseEndDate" className="text-sm">Lease End Date *</Label>
                     <Input
-                      id="tenantEmail"
-                      type="email"
-                      value={formData.tenantEmail}
-                      onChange={(e) => handleInputChange('tenantEmail', e.target.value)}
-                      placeholder="tenant@example.com"
+                      id="leaseEndDate"
+                      type="date"
+                      value={formData.leaseEndDate}
+                      onChange={(e) => handleInputChange('leaseEndDate', e.target.value)}
+                      required
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Financial Terms */}
+            <Card>
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+                  Financial Terms
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="monthlyRent" className="text-sm">Monthly Rent ($) *</Label>
+                    <Input
+                      id="monthlyRent"
+                      type="number"
+                      value={formData.monthlyRent}
+                      onChange={(e) => handleInputChange('monthlyRent', e.target.value)}
+                      placeholder="2000"
+                      required
+                      className="text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="tenantPhone">Phone</Label>
+                    <Label htmlFor="securityDeposit" className="text-sm">Security Deposit ($) *</Label>
                     <Input
-                      id="tenantPhone"
-                      value={formData.tenantPhone}
-                      onChange={(e) => handleInputChange('tenantPhone', e.target.value)}
-                      placeholder="(555) 123-4567"
+                      id="securityDeposit"
+                      type="number"
+                      value={formData.securityDeposit}
+                      onChange={(e) => handleInputChange('securityDeposit', e.target.value)}
+                      placeholder="2000"
+                      required
+                      className="text-sm"
                     />
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </form>
+        </div>
 
-          {/* Property Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <MapPin className="w-5 h-5 text-green-600" />
-                Property Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <Label htmlFor="propertyAddress">Property Address *</Label>
-                  <Input
-                    id="propertyAddress"
-                    value={formData.propertyAddress}
-                    onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
-                    placeholder="123 Main Street, City, State 12345"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="unitNumber">Unit Number (Optional)</Label>
-                  <Input
-                    id="unitNumber"
-                    value={formData.unitNumber}
-                    onChange={(e) => handleInputChange('unitNumber', e.target.value)}
-                    placeholder="Apt 2B, Unit 5, etc."
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="rentDueDate">Rent Due Date</Label>
-                  <Select value={formData.rentDueDate} onValueChange={(value) => handleInputChange('rentDueDate', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 31 }, (_, i) => (
-                        <SelectItem key={i + 1} value={String(i + 1)}>
-                          {i + 1}{i === 0 ? 'st' : i === 1 ? 'nd' : i === 2 ? 'rd' : 'th'} of each month
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="leaseStartDate">Lease Start Date *</Label>
-                  <Input
-                    id="leaseStartDate"
-                    type="date"
-                    value={formData.leaseStartDate}
-                    onChange={(e) => handleInputChange('leaseStartDate', e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="leaseEndDate">Lease End Date *</Label>
-                  <Input
-                    id="leaseEndDate"
-                    type="date"
-                    value={formData.leaseEndDate}
-                    onChange={(e) => handleInputChange('leaseEndDate', e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <Separator />
 
-          {/* Financial Terms */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <DollarSign className="w-5 h-5 text-purple-600" />
-                Financial Terms
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="monthlyRent">Monthly Rent ($) *</Label>
-                  <Input
-                    id="monthlyRent"
-                    type="number"
-                    value={formData.monthlyRent}
-                    onChange={(e) => handleInputChange('monthlyRent', e.target.value)}
-                    placeholder="2000"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="securityDeposit">Security Deposit ($) *</Label>
-                  <Input
-                    id="securityDeposit"
-                    type="number"
-                    value={formData.securityDeposit}
-                    onChange={(e) => handleInputChange('securityDeposit', e.target.value)}
-                    placeholder="2000"
-                    required
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Separator />
-
-          <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-              Generate Professional Contract
-            </Button>
-          </div>
-        </form>
+        <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 flex-shrink-0">
+          <Button type="button" variant="outline" onClick={onClose} className="text-sm">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-sm">
+            Generate Professional Contract
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

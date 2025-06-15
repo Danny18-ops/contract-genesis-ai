@@ -76,52 +76,52 @@ export const EnhancedContractTypeSelector = ({
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Choose Your Contract Type</h3>
+    <div className="space-y-4 w-full">
+      <div className="px-2">
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">Choose Your Contract Type</h3>
         <p className="text-gray-600 text-sm">Select the type of contract you want to create</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 px-2">
         {contractTypes.map((contract) => (
           <Card 
             key={contract.id}
-            className={`cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
+            className={`cursor-pointer transition-all duration-200 hover:shadow-md border-2 w-full ${
               selectedType === contract.id 
                 ? 'border-blue-500 bg-blue-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => handleCardClick(contract.id)}
           >
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 p-4 sm:p-6">
               <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-3">
-                  <ContractTypeIcon contractType={contract.id} className="w-8 h-8" />
-                  <div>
-                    <CardTitle className="text-base">{contract.title}</CardTitle>
-                    <Badge variant={contract.badgeColor} className="mt-1">
+                <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                  <ContractTypeIcon contractType={contract.id} className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="text-sm sm:text-base truncate">{contract.title}</CardTitle>
+                    <Badge variant={contract.badgeColor} className="mt-1 text-xs">
                       {contract.badge}
                     </Badge>
                   </div>
                 </div>
                 {selectedType === contract.id && (
-                  <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 ml-2">
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white"></div>
                   </div>
                 )}
               </div>
             </CardHeader>
-            <CardContent>
-              <CardDescription className="text-sm">
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <CardDescription className="text-xs sm:text-sm">
                 {contract.description}
               </CardDescription>
               
               {/* Professional Contract Button for Rental */}
               {contract.id === 'rental' && selectedType === 'rental' && (
-                <div className="mt-4 pt-3 border-t border-gray-200">
+                <div className="mt-3 sm:mt-4 pt-3 border-t border-gray-200">
                   <Button 
                     onClick={handleProfessionalButtonClick}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs sm:text-sm"
                     size="sm"
                     type="button"
                   >
@@ -138,7 +138,6 @@ export const EnhancedContractTypeSelector = ({
       </div>
 
       {/* Professional Rental Form Dialog */}
-      {console.log('Rendering ProfessionalRentalForm with isOpen:', showProfessionalRental)}
       <ProfessionalRentalForm
         isOpen={showProfessionalRental}
         onClose={handleCloseForm}
