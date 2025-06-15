@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 
 interface PdfOptions {
@@ -93,7 +92,7 @@ export class EnhancedPdfGenerator {
     // Draw a stylized lotus logo using geometric shapes
     this.pdf.setFillColor(255, 123, 89); // Orange-red gradient start
     
-    // Create lotus petals using ellipses and curves
+    // Create lotus petals using circles and curves
     const centerX = x + size/2;
     const centerY = y + size/2;
     const petalSize = size * 0.3;
@@ -108,8 +107,8 @@ export class EnhancedPdfGenerator {
       const intensity = 255 - (i * 20);
       this.pdf.setFillColor(intensity, 80 + (i * 10), 120 + (i * 15));
       
-      // Draw petal as an ellipse
-      this.pdf.ellipse(petalX, petalY, petalSize * 0.4, petalSize * 0.6, Math.PI/4 + angle, 'F');
+      // Draw petal as a circle instead of ellipse
+      this.pdf.circle(petalX, petalY, petalSize * 0.4, 'F');
     }
     
     // Center circle
