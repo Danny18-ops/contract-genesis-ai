@@ -315,6 +315,148 @@ export const ProfessionalRentalForm = ({ isOpen, onClose, onContractGenerate }: 
                       className="text-sm"
                     />
                   </div>
+                  <div>
+                    <Label htmlFor="lateFeeAmount" className="text-sm">Late Fee Amount ($)</Label>
+                    <Input
+                      id="lateFeeAmount"
+                      type="number"
+                      value={formData.lateFeeAmount}
+                      onChange={(e) => handleInputChange('lateFeeAmount', e.target.value)}
+                      placeholder="50"
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Utilities & Additional Charges */}
+            <Card>
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
+                  Utilities & Additional Charges
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { field: 'waterPaidBy', label: 'Water' },
+                    { field: 'electricityPaidBy', label: 'Electricity' },
+                    { field: 'gasPaidBy', label: 'Gas' },
+                    { field: 'internetPaidBy', label: 'Internet' }
+                  ].map(({ field, label }) => (
+                    <div key={field}>
+                      <Label className="text-sm">{label} paid by:</Label>
+                      <Select 
+                        value={formData[field as keyof typeof formData] as string} 
+                        onValueChange={(value) => handleInputChange(field, value)}
+                      >
+                        <SelectTrigger className="text-sm">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="tenant" className="text-sm">Tenant</SelectItem>
+                          <SelectItem value="landlord" className="text-sm">Landlord</SelectItem>
+                          <SelectItem value="shared" className="text-sm">Shared</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t">
+                  <div>
+                    <Label htmlFor="parkingCharges" className="text-sm">Parking Charges ($)</Label>
+                    <Input
+                      id="parkingCharges"
+                      type="number"
+                      value={formData.parkingCharges}
+                      onChange={(e) => handleInputChange('parkingCharges', e.target.value)}
+                      placeholder="0"
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="storageCharges" className="text-sm">Storage Charges ($)</Label>
+                    <Input
+                      id="storageCharges"
+                      type="number"
+                      value={formData.storageCharges}
+                      onChange={(e) => handleInputChange('storageCharges', e.target.value)}
+                      placeholder="0"
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Terms & Conditions */}
+            <Card>
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+                  Terms & Conditions
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm">Lease Type</Label>
+                    <Select value={formData.leaseType} onValueChange={(value) => handleInputChange('leaseType', value)}>
+                      <SelectTrigger className="text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fixed" className="text-sm">Fixed Term</SelectItem>
+                        <SelectItem value="month-to-month" className="text-sm">Month-to-Month</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="moveOutNotice" className="text-sm">Move-out Notice Period (days)</Label>
+                    <Input
+                      id="moveOutNotice"
+                      type="number"
+                      value={formData.moveOutNotice}
+                      onChange={(e) => handleInputChange('moveOutNotice', e.target.value)}
+                      placeholder="30"
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="governingLaw" className="text-sm">Governing Law</Label>
+                  <Input
+                    id="governingLaw"
+                    value={formData.governingLaw}
+                    onChange={(e) => handleInputChange('governingLaw', e.target.value)}
+                    placeholder="State of California, USA"
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="petPolicy"
+                    checked={formData.petPolicy}
+                    onCheckedChange={(checked) => handleInputChange('petPolicy', checked as boolean)}
+                  />
+                  <Label htmlFor="petPolicy" className="text-sm">Pets allowed</Label>
+                </div>
+                
+                <div>
+                  <Label htmlFor="maintenanceResponsibilities" className="text-sm">Maintenance Responsibilities</Label>
+                  <Textarea
+                    id="maintenanceResponsibilities"
+                    value={formData.maintenanceResponsibilities}
+                    onChange={(e) => handleInputChange('maintenanceResponsibilities', e.target.value)}
+                    placeholder="Describe maintenance responsibilities for both parties..."
+                    className="text-sm min-h-[80px]"
+                  />
                 </div>
               </CardContent>
             </Card>
