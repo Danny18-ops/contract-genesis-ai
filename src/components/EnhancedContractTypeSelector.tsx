@@ -63,13 +63,6 @@ export const EnhancedContractTypeSelector = ({
     setShowProfessionalRental(false);
   };
 
-  const handleProfessionalButtonClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Professional contract button clicked, opening form');
-    setShowProfessionalRental(true);
-  };
-
   const handleCloseForm = () => {
     console.log('Closing professional rental form');
     setShowProfessionalRental(false);
@@ -115,23 +108,6 @@ export const EnhancedContractTypeSelector = ({
               <CardDescription className="text-xs sm:text-sm">
                 {contract.description}
               </CardDescription>
-              
-              {/* Professional Contract Button for Rental */}
-              {contract.id === 'rental' && (
-                <div className="mt-3 sm:mt-4 pt-3 border-t border-gray-200">
-                  <Button 
-                    onClick={handleProfessionalButtonClick}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs sm:text-sm"
-                    size="sm"
-                    type="button"
-                  >
-                    Create Professional Contract
-                  </Button>
-                  <p className="text-xs text-gray-500 mt-1 text-center">
-                    Full-featured lease agreement builder
-                  </p>
-                </div>
-              )}
             </CardContent>
           </Card>
         ))}
