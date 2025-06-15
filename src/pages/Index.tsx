@@ -39,8 +39,8 @@ const Index = () => {
       title: 'Rental Agreement',
       description: 'Professional property lease agreements with comprehensive terms',
       icon: Home,
-      gradient: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-50',
+      gradient: 'from-pink-500 to-rose-500',
+      bgColor: 'bg-pink-50',
       contractType: 'rental'
     },
     {
@@ -48,8 +48,8 @@ const Index = () => {
       title: 'Job Offer Letter',
       description: 'Employment contracts with salary, benefits, and terms',
       icon: Briefcase,
-      gradient: 'from-blue-500 to-indigo-500',
-      bgColor: 'bg-blue-50',
+      gradient: 'from-pink-500 to-purple-500',
+      bgColor: 'bg-pink-50',
       contractType: 'jobOffer'
     },
     {
@@ -57,8 +57,8 @@ const Index = () => {
       title: 'Car Rental Contract',
       description: 'Vehicle lease agreements with insurance and liability terms',
       icon: Car,
-      gradient: 'from-purple-500 to-violet-500',
-      bgColor: 'bg-purple-50',
+      gradient: 'from-rose-500 to-pink-500',
+      bgColor: 'bg-rose-50',
       contractType: 'carRental'
     },
     {
@@ -66,8 +66,8 @@ const Index = () => {
       title: 'Business Agreement',
       description: 'Professional business partnerships and service contracts',
       icon: Handshake,
-      gradient: 'from-orange-500 to-amber-500',
-      bgColor: 'bg-orange-50',
+      gradient: 'from-pink-600 to-rose-600',
+      bgColor: 'bg-pink-50',
       contractType: 'business'
     },
     {
@@ -75,8 +75,8 @@ const Index = () => {
       title: 'Storage Container Lease',
       description: 'Storage facility agreements with access and payment terms',
       icon: Package,
-      gradient: 'from-red-500 to-pink-500',
-      bgColor: 'bg-red-50',
+      gradient: 'from-rose-500 to-pink-600',
+      bgColor: 'bg-rose-50',
       contractType: 'storage'
     },
     {
@@ -84,8 +84,8 @@ const Index = () => {
       title: 'Consulting Agreement',
       description: 'Professional consulting services with deliverables and timelines',
       icon: Award,
-      gradient: 'from-cyan-500 to-teal-500',
-      bgColor: 'bg-cyan-50',
+      gradient: 'from-pink-500 to-rose-400',
+      bgColor: 'bg-pink-50',
       contractType: 'consulting'
     }
   ];
@@ -124,13 +124,13 @@ const Index = () => {
           backgroundImage: `url('https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1920&h=1080&fit=crop&crop=center')`
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/95 via-indigo-900/90 to-purple-900/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-900/95 via-rose-900/90 to-purple-900/95" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
       
       {/* Animated background elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}} />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}} />
       
       {/* Content */}
       <div className="relative z-10">
@@ -150,11 +150,11 @@ const Index = () => {
         <div className="container mx-auto px-6 py-12">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-6">
-              <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 rounded-full shadow-2xl backdrop-blur-sm border border-white/20">
+              <div className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 p-6 rounded-full shadow-2xl backdrop-blur-sm border border-white/20">
                 <FileText className="w-12 h-12 text-white drop-shadow-lg" />
               </div>
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
+            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-white via-pink-100 to-rose-100 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
               GenContract
             </h1>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
@@ -168,19 +168,19 @@ const Index = () => {
             {/* Enhanced Feature highlights */}
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
-                <Sparkles className="w-6 h-6 text-yellow-300 drop-shadow-lg" />
+                <Sparkles className="w-6 h-6 text-pink-300 drop-shadow-lg" />
                 <span className="text-sm font-bold text-white drop-shadow-md">AI-Powered Generation</span>
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
-                <Shield className="w-6 h-6 text-green-300 drop-shadow-lg" />
+                <Shield className="w-6 h-6 text-rose-300 drop-shadow-lg" />
                 <span className="text-sm font-bold text-white drop-shadow-md">Legally Sound</span>
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
-                <Download className="w-6 h-6 text-purple-300 drop-shadow-lg" />
+                <Download className="w-6 h-6 text-pink-300 drop-shadow-lg" />
                 <span className="text-sm font-bold text-white drop-shadow-md">PDF Export</span>
               </div>
               <div className="flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-4 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl hover:bg-white/25 transition-all duration-300 hover:scale-105">
-                <Zap className="w-6 h-6 text-orange-300 drop-shadow-lg" />
+                <Zap className="w-6 h-6 text-rose-300 drop-shadow-lg" />
                 <span className="text-sm font-bold text-white drop-shadow-md">Quick Templates</span>
               </div>
             </div>
@@ -193,7 +193,7 @@ const Index = () => {
               <Switch
                 checked={showProfessionalTemplates}
                 onCheckedChange={setShowProfessionalTemplates}
-                className="data-[state=checked]:bg-blue-500"
+                className="data-[state=checked]:bg-pink-500"
               />
               <Label className="text-white font-medium">Professional Templates</Label>
             </div>
@@ -216,7 +216,7 @@ const Index = () => {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
                 {professionalTemplates.map((template) => (
-                  <Card key={template.id} className={`${template.bgColor} border-white/20 overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group`}>
+                  <Card key={template.id} className={`${template.bgColor} border-pink-200 overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group`}>
                     <CardContent className="p-0">
                       <div className={`bg-gradient-to-r ${template.gradient} p-6 text-white relative overflow-hidden`}>
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
@@ -247,12 +247,12 @@ const Index = () => {
           {/* Main Content */}
           <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mt-16 contract-builder-section">
             {/* Contract Form */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20" />
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-pink-200 overflow-hidden hover:shadow-3xl transition-all duration-300">
+              <div className="bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-rose-500/20" />
                 <div className="relative z-10">
                   <h2 className="text-3xl font-bold text-white drop-shadow-lg">Contract Builder</h2>
-                  <p className="text-blue-100 mt-3 text-lg drop-shadow-md">Fill in details or use quick templates to generate your contract</p>
+                  <p className="text-pink-100 mt-3 text-lg drop-shadow-md">Fill in details or use quick templates to generate your contract</p>
                 </div>
               </div>
               <div className="p-8 max-h-[800px] overflow-y-auto">
@@ -263,12 +263,12 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden hover:shadow-3xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-gray-800/20" />
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-pink-200 overflow-hidden hover:shadow-3xl transition-all duration-300">
+              <div className="bg-gradient-to-r from-pink-700 via-rose-800 to-purple-900 p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-600/20 to-rose-800/20" />
                 <div className="relative z-10">
                   <h2 className="text-3xl font-bold text-white drop-shadow-lg">Contract Preview</h2>
-                  <p className="text-gray-200 mt-3 text-lg drop-shadow-md">Your generated contract will appear here</p>
+                  <p className="text-pink-200 mt-3 text-lg drop-shadow-md">Your generated contract will appear here</p>
                 </div>
               </div>
               <div className="p-8 max-h-[800px] overflow-y-auto">

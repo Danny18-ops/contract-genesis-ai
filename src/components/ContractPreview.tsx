@@ -49,23 +49,23 @@ export const ContractPreview = ({
   const getTemplateStyles = () => {
     switch (template) {
       case 'professional':
-        return 'font-serif text-gray-800 leading-relaxed';
+        return 'font-serif text-pink-800 leading-relaxed';
       case 'casual':
-        return 'font-sans text-gray-700 leading-normal';
+        return 'font-sans text-pink-700 leading-normal';
       case 'legal':
-        return 'font-mono text-gray-900 leading-tight text-sm';
+        return 'font-mono text-pink-900 leading-tight text-sm';
       default:
-        return 'font-sans text-gray-800 leading-normal';
+        return 'font-sans text-pink-800 leading-normal';
     }
   };
 
   if (isGenerating) {
     return (
-      <Card className="h-full flex items-center justify-center">
+      <Card className="h-full flex items-center justify-center border-pink-200">
         <CardContent className="text-center p-8">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <h3 className="text-lg font-semibold mb-2">Generating Your Contract</h3>
-          <p className="text-gray-600">Please wait while we create your personalized contract...</p>
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-pink-600" />
+          <h3 className="text-lg font-semibold mb-2 text-pink-800">Generating Your Contract</h3>
+          <p className="text-pink-600">Please wait while we create your personalized contract...</p>
         </CardContent>
       </Card>
     );
@@ -73,11 +73,11 @@ export const ContractPreview = ({
 
   if (!contract) {
     return (
-      <Card className="h-full flex items-center justify-center">
+      <Card className="h-full flex items-center justify-center border-pink-200">
         <CardContent className="text-center p-8">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-lg font-semibold mb-2">No Contract Yet</h3>
-          <p className="text-gray-600">Fill out the form to generate your contract preview</p>
+          <FileText className="w-16 h-16 mx-auto mb-4 text-pink-400" />
+          <h3 className="text-lg font-semibold mb-2 text-pink-800">No Contract Yet</h3>
+          <p className="text-pink-600">Fill out the form to generate your contract preview</p>
         </CardContent>
       </Card>
     );
@@ -86,15 +86,15 @@ export const ContractPreview = ({
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Contract Preview</h3>
-        <Button onClick={handleDownloadPDF} className="flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-pink-800">Contract Preview</h3>
+        <Button onClick={handleDownloadPDF} className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white">
           <Download className="w-4 h-4" />
           Download PDF
         </Button>
       </div>
       
-      <Card>
-        <CardContent className="p-6">
+      <Card className="border-pink-200">
+        <CardContent className="p-6 bg-gradient-to-br from-pink-50 to-rose-50">
           <div className={`whitespace-pre-wrap ${getTemplateStyles()}`}>
             {contract}
           </div>
